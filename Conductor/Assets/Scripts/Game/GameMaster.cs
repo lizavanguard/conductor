@@ -8,6 +8,7 @@ namespace Consuctor.Game
     {
         // 生成したほとんどのインスタンスにこれを食わせる
         MessageBus.Manager messageBusManager;
+        CommandRunner commandRunner;
 
         /// <summary>
         /// 各Modelの生成と初期化
@@ -15,6 +16,7 @@ namespace Consuctor.Game
         private void Awake()
         {
             messageBusManager = new MessageBus.Manager();
+            commandRunner = new CommandRunner();
         }
 
         /// <summary>
@@ -22,7 +24,9 @@ namespace Consuctor.Game
         /// </summary>
         private void Update()
         {
-            
+
+            // FIXME: after updating each component
+            commandRunner.Update();
         }
     }
 }
