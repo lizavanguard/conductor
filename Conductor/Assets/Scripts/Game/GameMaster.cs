@@ -6,6 +6,8 @@ namespace Consuctor.Game
 {
     public class GameMaster : MonoBehaviour
     {
+        // 生成したほとんどのインスタンスにこれを食わせる
+        MessageBus.Manager messageBusManager;
         CommandRunner commandRunner;
 
         /// <summary>
@@ -13,6 +15,7 @@ namespace Consuctor.Game
         /// </summary>
         private void Awake()
         {
+            messageBusManager = new MessageBus.Manager();
             commandRunner = new CommandRunner();
         }
 
