@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Consuctor.Game.MessageBus
+namespace Conductor.Game.MessageBus
 {
     /// <summary>
     /// 各MessageBusインスタンスの生成、保持とDispatchのみ請け負う

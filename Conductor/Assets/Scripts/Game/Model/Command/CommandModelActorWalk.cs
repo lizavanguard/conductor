@@ -4,33 +4,34 @@ using UnityEngine;
 
 namespace Conductor.Game.Model
 {
-    public abstract class CommandModelBase
+    public abstract class CommandModelActorWalk : CommandModelBase
     {
-        MessageBus.Manager messageBusManager;
+        int targetActorId;
 
-        protected MessageBus.Manager MessageBusManager
+        public CommandModelActorWalk(MessageBus.Manager messageBusManager, int targetActorId)
+            : base(messageBusManager)
         {
-            get { return messageBusManager; }
-        }
-
-        public CommandModelBase(MessageBus.Manager messageBusManager)
-        {
-            this.messageBusManager = messageBusManager;
+            this.targetActorId = targetActorId;
         }
 
         /// <summary>
         /// Updateの中で一回ずつ呼ぶ
         /// 1回で完了するコマンドの場合はHasFinishedで即時trueを返す
         /// </summary>
-        public virtual void Run()
+        public override void Run()
         {
+            // 対象の相手に歩くメッセージを飛ばす
+            MessageBusManager.ActorWalkBus.SendMessage(
+                address: targetActorId,
+                message: new MessageBus.ActorWalkBus.Message(true)
+                );
         }
 
         /// <summary>
         /// Runを呼んだ直後にこの関数で終了判定を取り、終了していたらコマンドを破棄する
         /// </summary>
         /// <returns></returns>
-        public virtual bool HasFinished()
+        public override bool HasFinished()
         {
             return true;
         }
@@ -41,7 +42,7 @@ namespace Conductor.Game.Model
         /// UI演出などが対象
         /// </summary>
         /// <returns></returns>
-        public virtual View.CommandViewBase[] GenerateCommandView()
+        public override View.CommandViewBase[] GenerateCommandView()
         {
             return null;
         }

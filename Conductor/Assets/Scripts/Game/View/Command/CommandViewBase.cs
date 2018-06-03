@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Consuctor.Game.View
+namespace Conductor.Game.View
 {
     public abstract class CommandViewBase
     {

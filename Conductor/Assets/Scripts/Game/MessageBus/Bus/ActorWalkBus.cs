@@ -3,13 +3,24 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Consuctor.Game.MessageBus
+namespace Conductor.Game.MessageBus
 {
     public class ActorWalkBus
     {
-        int nextId;
         Dictionary<int, Action<Message>> handlerContainer;
-        List<Message> messageQueue;
+        List<AddressedMessage> messageQueue;
+
+        public struct AddressedMessage
+        {
+            public int Address { get; private set; }
+            public Message Message { get; private set; }
+
+            public AddressedMessage(int address, Message message)
+            {
+                Address = address;
+                Message = message;
+            }
+        }
 
         public struct Message
         {
@@ -23,43 +34,40 @@ namespace Consuctor.Game.MessageBus
 
         public ActorWalkBus()
         {
-            nextId = 0;
             handlerContainer = new Dictionary<int, Action<Message>>();
-            messageQueue = new List<Message>();
+            messageQueue = new List<AddressedMessage>();
         }
 
-        public int Connect(Action<Message> handler)
+        public int Connect(int address, Action<Message> handler)
         {
-            int id = nextId;
-            handlerContainer.Add(id, handler);
-            nextId++;
+            handlerContainer.Add(address, handler);
 
-            return id;
+            return address;
         }
 
-        public void Disconnect(int id)
+        public void Disconnect(int address)
         {
-            if (handlerContainer.ContainsKey(id))
+            if (handlerContainer.ContainsKey(address))
             {
-                handlerContainer.Remove(id);
+                handlerContainer.Remove(address);
             }
         }
 
-        public void SendMessage(Message message)
+        public void SendMessage(int address, Message message)
         {
-            messageQueue.Add(message);
+            messageQueue.Add(new AddressedMessage(address, message));
         }
 
         public void Dispatch()
         {
-            foreach (var message in messageQueue)
+            foreach (var addressedMessage in messageQueue)
             {
-                foreach (var handler in handlerContainer.Values)
+                if (handlerContainer.ContainsKey(addressedMessage.Address))
                 {
-                    handler.Invoke(message);
+                    var handler = handlerContainer[addressedMessage.Address];
+                    handler(addressedMessage.Message);
                 }
             }
-
             messageQueue.Clear();
         }
     }

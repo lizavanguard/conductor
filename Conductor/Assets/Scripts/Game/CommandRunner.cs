@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Consuctor.Game
+namespace Conductor.Game
 {
     /// <summary>
     /// コマンドを受け付けて実行する
