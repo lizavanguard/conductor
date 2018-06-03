@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Consuctor.Game.Model
+namespace Conductor.Game.Model
 {
     public abstract class CommandModelBase
     {
