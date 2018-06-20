@@ -15,7 +15,13 @@ namespace Conductor.Game
         List<View.CommandViewBase> runningCommandView;
         List<Model.CommandModelBase> runningCommandModel;
 
-        public CommandRunner() { }
+        public CommandRunner()
+        {
+            scheduledCommandView = new List<View.CommandViewBase>();
+            scheduledCommandModel = new List<Model.CommandModelBase>();
+            runningCommandView = new List<View.CommandViewBase>();
+            runningCommandModel = new List<Model.CommandModelBase>();
+        }
 
         public void Schedule(View.CommandViewBase commandView)
         {

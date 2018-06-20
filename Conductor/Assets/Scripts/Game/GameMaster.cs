@@ -7,7 +7,7 @@ namespace Conductor.Game
     public class GameMaster : MonoBehaviour
     {
         // 生成したほとんどのインスタンスにこれを食わせる
-        MessageBus.Dispatcher messageBusManager;
+        MessageBus.Dispatcher messageBusDispatcher;
         CommandRunner commandRunner;
 
         /// <summary>
@@ -15,7 +15,7 @@ namespace Conductor.Game
         /// </summary>
         private void Awake()
         {
-            messageBusManager = new MessageBus.Dispatcher();
+            messageBusDispatcher = new MessageBus.Dispatcher();
             commandRunner = new CommandRunner();
         }
 
@@ -26,6 +26,8 @@ namespace Conductor.Game
         {
             // FIXME: after updating each component
             commandRunner.Update();
+
+            messageBusDispatcher.Dispatch();
         }
     }
 }
