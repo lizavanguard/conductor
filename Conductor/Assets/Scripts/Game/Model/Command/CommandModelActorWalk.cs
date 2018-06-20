@@ -8,7 +8,7 @@ namespace Conductor.Game.Model
     {
         int targetActorId;
 
-        public CommandModelActorWalk(MessageBus.Manager messageBusManager, int targetActorId)
+        public CommandModelActorWalk(MessageBus.Dispatcher messageBusManager, int targetActorId)
             : base(messageBusManager)
         {
             this.targetActorId = targetActorId;
@@ -21,7 +21,7 @@ namespace Conductor.Game.Model
         public override void Run()
         {
             // 対象の相手に歩くメッセージを飛ばす
-            MessageBusManager.ActorWalkBus.SendMessage(
+            MessageBus.ActorWalkBus.SendMessage(
                 address: targetActorId,
                 message: new MessageBus.ActorWalkBus.Message(true)
                 );
