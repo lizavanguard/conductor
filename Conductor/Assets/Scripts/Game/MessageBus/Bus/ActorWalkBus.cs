@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Conductor.Game.MessageBus
 {
-    public class ActorWalkBus
+    public static class ActorWalkBus
     {
-        Dictionary<int, Action<Message>> handlerContainer;
-        List<AddressedMessage> messageQueue;
+        static Dictionary<int, Action<Message>> handlerContainer = new Dictionary<int, Action<Message>>();
+        static List<AddressedMessage> messageQueue = new List<AddressedMessage>();
 
         public struct AddressedMessage
         {
@@ -32,20 +32,14 @@ namespace Conductor.Game.MessageBus
             }
         }
 
-        public ActorWalkBus()
-        {
-            handlerContainer = new Dictionary<int, Action<Message>>();
-            messageQueue = new List<AddressedMessage>();
-        }
-
-        public int Connect(int address, Action<Message> handler)
+        public static int Connect(int address, Action<Message> handler)
         {
             handlerContainer.Add(address, handler);
 
             return address;
         }
 
-        public void Disconnect(int address)
+        public static void Disconnect(int address)
         {
             if (handlerContainer.ContainsKey(address))
             {
@@ -53,12 +47,12 @@ namespace Conductor.Game.MessageBus
             }
         }
 
-        public void SendMessage(int address, Message message)
+        public static void SendMessage(int address, Message message)
         {
             messageQueue.Add(new AddressedMessage(address, message));
         }
 
-        public void Dispatch()
+        public static void Dispatch()
         {
             foreach (var addressedMessage in messageQueue)
             {
