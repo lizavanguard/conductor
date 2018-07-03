@@ -6,8 +6,9 @@ namespace Conductor.Game.View
 {
     public class ActorViewBase : MonoBehaviour
     {
-        public virtual void Walk()
+        public void UpdateRotationByDirection(Vector3 direction)
         {
+            transform.rotation = Quaternion.FromToRotation(Vector3.forward, direction);
         }
     }
 }

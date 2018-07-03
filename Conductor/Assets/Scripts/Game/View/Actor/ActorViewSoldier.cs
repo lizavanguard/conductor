@@ -6,8 +6,5 @@ namespace Conductor.Game.View
 {
     public class ActorViewSoldier : ActorViewBase
     {
-        public override void Walk()
-        {
-        }
     }
 }

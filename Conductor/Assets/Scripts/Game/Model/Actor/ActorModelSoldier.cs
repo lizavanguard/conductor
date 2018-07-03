@@ -8,6 +8,7 @@ namespace Conductor.Game.Model
 {
     public class ActorModelSoldier : ActorModelBase, IDisposable
     {
+        static readonly float WalkSpeed = 0.1f;
         int walkBusId;
 
         public ActorModelSoldier(ActorViewSoldier viewSoldier)
@@ -18,6 +19,16 @@ namespace Conductor.Game.Model
 
         public override void Update() { }
 
+        public override void Walk(bool front)
+        {
+            // 位置更新
+            var velocity = HorizontalDirection * WalkSpeed;
+            ViewBase.transform.localPosition += velocity;
+
+            // FIXME: Viewに状態通知
+            
+        }
+
         public void Dispose()
         {
             DisconnectMessageBus();
@@ -27,8 +38,7 @@ namespace Conductor.Game.Model
         {
             Action<MessageBus.ActorWalkBus.Message> walkMessageHandler = message =>
             {
-                // 前進する
-                base.ViewBase.Walk();
+                Walk(message.Front);
             };
             walkBusId = MessageBus.ActorWalkBus.Connect(this.Id, walkMessageHandler);
         }

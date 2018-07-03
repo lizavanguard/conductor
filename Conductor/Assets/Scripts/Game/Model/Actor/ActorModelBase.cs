@@ -18,13 +18,31 @@ namespace Conductor.Game.Model
 
         protected ActorViewBase ViewBase { get { return viewBase; } }
 
+        Vector3 horizontalDirection;
+
+        protected Vector3 HorizontalDirection
+        {
+            set { horizontalDirection = value; }
+            get { return horizontalDirection; }
+        }
+
         public ActorModelBase(ActorViewBase viewBase)
         {
             this.viewBase = viewBase;
+
+            // FIXME: 初期化用のinfo構造体から初期化する
+            horizontalDirection = Vector3.forward;
+            viewBase.transform.localPosition = Vector3.zero;
+
+            // 初期状態をViewに反映
+            viewBase.UpdateRotationByDirection(horizontalDirection);
+
             id = nextId;
             nextId++;
         }
 
         public abstract void Update();
+
+        public abstract void Walk(bool front);
     }
 }
