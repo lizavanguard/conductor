@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Conductor.Game.View;
 
 namespace Conductor.Game.Model
 {
@@ -13,9 +14,13 @@ namespace Conductor.Game.Model
         public int Id { get { return id; } }
 
         // FIXME: ActorViewBaseができたらその参照を持つようにする
+        ActorViewBase viewBase;
 
-        public ActorModelBase()
+        protected ActorViewBase ViewBase { get { return viewBase; } }
+
+        public ActorModelBase(ActorViewBase viewBase)
         {
+            this.viewBase = viewBase;
             id = nextId;
             nextId++;
         }

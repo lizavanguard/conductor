@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Conductor.Game.View;
 using System;
 
 namespace Conductor.Game.Model
@@ -9,10 +10,9 @@ namespace Conductor.Game.Model
     {
         int walkBusId;
 
-        public ActorModelSoldier()
+        public ActorModelSoldier(ActorViewSoldier viewSoldier)
+            : base(viewSoldier)
         {
-            // FIXME: viewのGameObject作成 作成済みのものを引数で貰うのもあり
-
             ConnectMessageBus();
         }
 
@@ -27,8 +27,8 @@ namespace Conductor.Game.Model
         {
             Action<MessageBus.ActorWalkBus.Message> walkMessageHandler = message =>
             {
-                // 前進する FIXME: implemet me, ha ha ha!
-                Debug.Log("あるくよ！");
+                // 前進する
+                base.ViewBase.Walk();
             };
             walkBusId = MessageBus.ActorWalkBus.Connect(this.Id, walkMessageHandler);
         }
