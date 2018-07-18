@@ -140,6 +140,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e1dcc7853ef69a42b3f540232083852, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  actorPrefabReference: {fileID: 11400000, guid: 9d2c97ccdc27a7547b9f0148f2ea45a9,
+    type: 2}
 --- !u!4 &141144716
 Transform:
   m_ObjectHideFlags: 0

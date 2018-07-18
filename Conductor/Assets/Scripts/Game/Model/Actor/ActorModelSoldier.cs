@@ -8,7 +8,8 @@ namespace Conductor.Game.Model
 {
     public class ActorModelSoldier : ActorModelBase, IDisposable
     {
-        static readonly float WalkSpeed = 0.1f;
+        // 分速60m換算
+        static readonly float WalkSpeed = 60.0f / 3600.0f;
         int walkBusId;
 
         public ActorModelSoldier(ActorViewSoldier viewSoldier)
@@ -23,7 +24,7 @@ namespace Conductor.Game.Model
         {
             // 位置更新
             var velocity = HorizontalDirection * WalkSpeed;
-            ViewBase.transform.localPosition += velocity;
+            ViewBase.transform.localPosition += front ? velocity : -velocity;
 
             // FIXME: Viewに状態通知
             

@@ -10,6 +10,13 @@ namespace Conductor.Game
         MessageBus.Dispatcher messageBusDispatcher;
         CommandRunner commandRunner;
 
+        [SerializeField]
+        View.ActorPrefabReference actorPrefabReference;
+
+        ActorFactory actorFactory;
+
+        Model.ActorModelSoldier mockSoldier;
+
         /// <summary>
         /// 各Modelの生成と初期化
         /// </summary>
@@ -17,6 +24,12 @@ namespace Conductor.Game
         {
             messageBusDispatcher = new MessageBus.Dispatcher();
             commandRunner = new CommandRunner();
+
+            // FIXME: マップ作成
+
+            // キャラクター作成 FIXME: 一旦モックとしてこう作るが管理クラスを設けたい
+            actorFactory = new ActorFactory(actorPrefabReference);
+            mockSoldier = actorFactory.CreateSoldier();
         }
 
         /// <summary>
@@ -24,6 +37,18 @@ namespace Conductor.Game
         /// </summary>
         private void Update()
         {
+            if (Input.GetKey(KeyCode.UpArrow))
+            {
+                var command = new Model.CommandModelActorWalk(messageBusDispatcher, mockSoldier.Id, true);
+                commandRunner.Schedule(command);
+            }
+
+            if (Input.GetKey(KeyCode.DownArrow))
+            {
+                var command = new Model.CommandModelActorWalk(messageBusDispatcher, mockSoldier.Id, false);
+                commandRunner.Schedule(command);
+            }
+
             // FIXME: after updating each component
             commandRunner.Update();
 
