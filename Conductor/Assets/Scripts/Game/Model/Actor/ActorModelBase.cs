@@ -44,5 +44,7 @@ namespace Conductor.Game.Model
         public abstract void Update();
 
         public abstract void Walk(bool front);
+
+        public abstract void Rotate(bool right);
     }
 }
