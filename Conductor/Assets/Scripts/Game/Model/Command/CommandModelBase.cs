@@ -34,16 +34,5 @@ namespace Conductor.Game.Model
         {
             return true;
         }
-
-        /// <summary>
-        /// このコマンドを実行した際にView側で叩くべきコマンド群を生成する
-        /// Model経由で叩かれるものは除く
-        /// UI演出などが対象
-        /// </summary>
-        /// <returns></returns>
-        public virtual View.CommandViewBase[] GenerateCommandView()
-        {
-            return null;
-        }
     }
 }

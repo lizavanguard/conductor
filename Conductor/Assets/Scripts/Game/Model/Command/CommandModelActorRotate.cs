@@ -4,16 +4,16 @@ using UnityEngine;
 
 namespace Conductor.Game.Model
 {
-    public class CommandModelActorWalk : CommandModelBase
+    public class CommandModelActorRotate : CommandModelBase
     {
         int targetActorId;
-        bool front;
+        bool right;
 
-        public CommandModelActorWalk(MessageBus.Dispatcher messageBusManager, int targetActorId, bool front)
+        public CommandModelActorRotate(MessageBus.Dispatcher messageBusManager, int targetActorId, bool right)
             : base(messageBusManager)
         {
             this.targetActorId = targetActorId;
-            this.front = front;
+            this.right = right;
         }
 
         /// <summary>
@@ -23,9 +23,9 @@ namespace Conductor.Game.Model
         public override void Run()
         {
             // 対象の相手に歩くメッセージを飛ばす
-            MessageBus.ActorWalkBus.SendMessage(
+            MessageBus.ActorRotateBus.SendMessage(
                 address: targetActorId,
-                message: new MessageBus.ActorWalkBus.Message(front)
+                message: new MessageBus.ActorRotateBus.Message(right)
                 );
         }
 

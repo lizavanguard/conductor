@@ -49,6 +49,18 @@ namespace Conductor.Game
                 commandRunner.Schedule(command);
             }
 
+            if (Input.GetKey(KeyCode.RightArrow))
+            {
+                var command = new Model.CommandModelActorRotate(messageBusDispatcher, mockSoldier.Id, true);
+                commandRunner.Schedule(command);
+            }
+
+            if (Input.GetKey(KeyCode.LeftArrow))
+            {
+                var command = new Model.CommandModelActorRotate(messageBusDispatcher, mockSoldier.Id, false);
+                commandRunner.Schedule(command);
+            }
+
             // FIXME: after updating each component
             commandRunner.Update();
 

@@ -10,7 +10,11 @@ namespace Conductor.Game.Model
     {
         // 分速60m換算
         static readonly float WalkSpeed = 60.0f / 3600.0f;
+        static readonly float RotateDegree = 1.0f;
         int walkBusId;
+        int rorateBusId;
+
+        float directionAngleDegree;
 
         public ActorModelSoldier(ActorViewSoldier viewSoldier)
             : base(viewSoldier)
@@ -30,6 +34,22 @@ namespace Conductor.Game.Model
             
         }
 
+        public override void Rotate(bool right)
+        {
+            float delta = right ? RotateDegree : -RotateDegree;
+            directionAngleDegree += delta;
+            directionAngleDegree = Mathf.Repeat(directionAngleDegree + 180.0f, 360.0f) - 180.0f;
+
+            var rotation = Quaternion.AngleAxis(directionAngleDegree, Vector3.up);
+            ViewBase.transform.localRotation = rotation;
+
+            // front更新
+            HorizontalDirection = rotation * Vector3.forward;
+
+            // FIXME: Viewに状態通知
+
+        }
+
         public void Dispose()
         {
             DisconnectMessageBus();
@@ -42,6 +62,12 @@ namespace Conductor.Game.Model
                 Walk(message.Front);
             };
             walkBusId = MessageBus.ActorWalkBus.Connect(this.Id, walkMessageHandler);
+
+            Action<MessageBus.ActorRotateBus.Message> rotateMessageHandler = message =>
+            {
+                Rotate(message.Right);
+            };
+            walkBusId = MessageBus.ActorRotateBus.Connect(this.Id, rotateMessageHandler);
         }
 
         void DisconnectMessageBus()

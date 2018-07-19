@@ -14,6 +14,7 @@ namespace Conductor.Game.MessageBus
     {
         public void Dispatch()
         {
+            ActorRotateBus.Dispatch();
             ActorWalkBus.Dispatch();
         }
     }
