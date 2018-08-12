@@ -10,7 +10,7 @@ namespace Conductor.Game.Model
         protected ActorModelBase Owner { get { return owner; } }
 
         CommandRunner commandRunner;
-        protected CommandRunner CommandRunner { get { return CommandRunner; } }
+        protected CommandRunner CommandRunner { get { return commandRunner; } }
 
         public OperationBase(ActorModelBase owner, CommandRunner commandRunner)
         {

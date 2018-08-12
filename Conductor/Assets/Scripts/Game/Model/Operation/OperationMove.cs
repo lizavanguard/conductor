@@ -29,21 +29,21 @@ namespace Conductor.Game.Model
                 return;
             }
 
+            float toTargetLength = direction.magnitude;
+            direction /= toTargetLength;
+
             // FIXME: 雑なので調整 最終的には前、前右、前左、その場の4点でスコアリングすればいい
-            bool rotate = Vector3.Dot(direction, Owner.HorizontalDirection) > Mathf.Cos(2.0f * Mathf.Deg2Rad);
+            bool rotate = Vector3.Dot(direction, Owner.HorizontalDirection) < Mathf.Cos(2.0f * Mathf.Deg2Rad);
             if(rotate)
             {
-                bool right = Vector3.Cross(Owner.HorizontalDirection, direction).z < 0;
+                bool right = Vector3.Cross(Owner.HorizontalDirection, direction).y > 0;
                 var rotateCommand = new CommandModelActorRotate(Owner, right);
                 CommandRunner.Schedule(rotateCommand);
             }
 
             // 向きの一致度と距離に応じて全身後退を判別
-            float toTargetLength = direction.magnitude;
-            direction /= toTargetLength;
-
             // FIXME: 雑なので調整
-            bool move = Vector3.Dot(direction, Owner.HorizontalDirection) < 0.5f;
+            bool move = Vector3.Dot(direction, Owner.HorizontalDirection) > 0.5f;
             if (move)
             {
                 var walkCommand = new CommandModelActorWalk(Owner, true);

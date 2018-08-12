@@ -15,6 +15,11 @@ namespace Conductor.Game
 
         Model.ActorModelSoldier mockSoldier;
 
+        [SerializeField]
+        Vector3 targetPosition;
+
+        Model.OperationBase operation;
+
         /// <summary>
         /// 各Modelの生成と初期化
         /// </summary>
@@ -58,8 +63,30 @@ namespace Conductor.Game
                 commandRunner.Schedule(command);
             }
 
+            UpdateOperationMock();
+
             // FIXME: after updating each component
             commandRunner.Update();
+        }
+
+        // ちゃんと管理クラス作ったら壊す
+        void UpdateOperationMock()
+        {
+            if (operation == null)
+            {
+                if (Input.GetKeyDown(KeyCode.Return))
+                {
+                    operation = new Model.OperationMove(mockSoldier, commandRunner, targetPosition);
+                }
+            }
+            else
+            {
+                operation.Run();
+                if (operation.HasFinished())
+                {
+                    operation = null;
+                }
+            }
         }
     }
 }
