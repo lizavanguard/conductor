@@ -10,7 +10,7 @@ namespace Conductor.Game.Model
         static readonly float Epsilon = 0.1f;
         Vector3 targetPosition;
 
-        public OperationMove(ActorModelBase owner, Vector3 targetPosition) : base(owner)
+        public OperationMove(ActorModelBase owner, CommandRunner commandRunner, Vector3 targetPosition) : base(owner, commandRunner)
         {
             this.targetPosition = targetPosition;
         }
@@ -21,7 +21,7 @@ namespace Conductor.Game.Model
             Vector3 tempTargetPosition = targetPosition;
             Vector3 currentPosition = Owner.ViewBase.transform.localPosition;
 
-            // 向きの一致度と距離に応じて全身後退を判別
+            // 回転方向決定
             Vector3 direction = tempTargetPosition - currentPosition;
             direction.y = 0.0f;
             if (direction.sqrMagnitude < Epsilon * Epsilon)
@@ -29,19 +29,32 @@ namespace Conductor.Game.Model
                 return;
             }
 
+            // FIXME: 雑なので調整 最終的には前、前右、前左、その場の4点でスコアリングすればいい
+            bool rotate = Vector3.Dot(direction, Owner.HorizontalDirection) > Mathf.Cos(2.0f * Mathf.Deg2Rad);
+            if(rotate)
+            {
+                bool right = Vector3.Cross(Owner.HorizontalDirection, direction).z < 0;
+                var rotateCommand = new CommandModelActorRotate(Owner, right);
+                CommandRunner.Schedule(rotateCommand);
+            }
+
+            // 向きの一致度と距離に応じて全身後退を判別
             float toTargetLength = direction.magnitude;
             direction /= toTargetLength;
 
-            bool move = false;
-            move = Vector3.Dot(direction, Owner.HorizontalDirection) < 0.5f;
-
-            // 回転方向決定
-
+            // FIXME: 雑なので調整
+            bool move = Vector3.Dot(direction, Owner.HorizontalDirection) < 0.5f;
+            if (move)
+            {
+                var walkCommand = new CommandModelActorWalk(Owner, true);
+                CommandRunner.Schedule(walkCommand);
+            }
         }
 
         public override bool HasFinished()
         {
-            return false;
+            Vector3 toTarget = targetPosition - Owner.ViewBase.transform.localPosition;
+            return toTarget.sqrMagnitude < Epsilon * Epsilon;
         }
     }
 }

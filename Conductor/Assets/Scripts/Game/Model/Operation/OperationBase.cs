@@ -9,9 +9,13 @@ namespace Conductor.Game.Model
         ActorModelBase owner;
         protected ActorModelBase Owner { get { return owner; } }
 
-        public OperationBase(ActorModelBase owner)
+        CommandRunner commandRunner;
+        protected CommandRunner CommandRunner { get { return CommandRunner; } }
+
+        public OperationBase(ActorModelBase owner, CommandRunner commandRunner)
         {
             this.owner = owner;
+            this.commandRunner = commandRunner;
         }
 
         public abstract void Run();
