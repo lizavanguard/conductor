@@ -16,13 +16,13 @@ namespace Conductor.Game.Model
         // FIXME: ActorViewBaseができたらその参照を持つようにする
         ActorViewBase viewBase;
 
-        protected ActorViewBase ViewBase { get { return viewBase; } }
+        public ActorViewBase ViewBase { get { return viewBase; } }
 
         Vector3 horizontalDirection;
 
-        protected Vector3 HorizontalDirection
+        public Vector3 HorizontalDirection
         {
-            set { horizontalDirection = value; }
+            protected set { horizontalDirection = value; }
             get { return horizontalDirection; }
         }
 
