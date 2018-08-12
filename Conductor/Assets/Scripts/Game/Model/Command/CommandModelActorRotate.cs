@@ -6,13 +6,13 @@ namespace Conductor.Game.Model
 {
     public class CommandModelActorRotate : CommandModelBase
     {
-        int targetActorId;
+        ActorModelBase targetActor;
         bool right;
 
-        public CommandModelActorRotate(MessageBus.Dispatcher messageBusManager, int targetActorId, bool right)
-            : base(messageBusManager)
+        public CommandModelActorRotate(ActorModelBase targetActor, bool right)
+            : base()
         {
-            this.targetActorId = targetActorId;
+            this.targetActor = targetActor;
             this.right = right;
         }
 
@@ -22,11 +22,7 @@ namespace Conductor.Game.Model
         /// </summary>
         public override void Run()
         {
-            // 対象の相手に歩くメッセージを飛ばす
-            MessageBus.ActorRotateBus.SendMessage(
-                address: targetActorId,
-                message: new MessageBus.ActorRotateBus.Message(right)
-                );
+            targetActor.Rotate(right);
         }
 
         /// <summary>

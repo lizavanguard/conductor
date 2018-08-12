@@ -6,7 +6,7 @@ using System;
 
 namespace Conductor.Game.Model
 {
-    public class ActorModelSoldier : ActorModelBase, IDisposable
+    public class ActorModelSoldier : ActorModelBase
     {
         // 分速60m換算
         static readonly float WalkSpeed = 60.0f / 3600.0f;
@@ -19,7 +19,6 @@ namespace Conductor.Game.Model
         public ActorModelSoldier(ActorViewSoldier viewSoldier)
             : base(viewSoldier)
         {
-            ConnectMessageBus();
         }
 
         public override void Update() { }
@@ -48,31 +47,6 @@ namespace Conductor.Game.Model
 
             // FIXME: Viewに状態通知
 
-        }
-
-        public void Dispose()
-        {
-            DisconnectMessageBus();
-        }
-
-        void ConnectMessageBus()
-        {
-            Action<MessageBus.ActorWalkBus.Message> walkMessageHandler = message =>
-            {
-                Walk(message.Front);
-            };
-            walkBusId = MessageBus.ActorWalkBus.Connect(this.Id, walkMessageHandler);
-
-            Action<MessageBus.ActorRotateBus.Message> rotateMessageHandler = message =>
-            {
-                Rotate(message.Right);
-            };
-            walkBusId = MessageBus.ActorRotateBus.Connect(this.Id, rotateMessageHandler);
-        }
-
-        void DisconnectMessageBus()
-        {
-            MessageBus.ActorWalkBus.Disconnect(walkBusId);
         }
     }
 }

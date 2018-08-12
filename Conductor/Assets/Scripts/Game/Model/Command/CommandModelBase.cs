@@ -6,16 +6,9 @@ namespace Conductor.Game.Model
 {
     public abstract class CommandModelBase
     {
-        MessageBus.Dispatcher messageBusManager;
 
-        protected MessageBus.Dispatcher MessageBusManager
+        public CommandModelBase()
         {
-            get { return messageBusManager; }
-        }
-
-        public CommandModelBase(MessageBus.Dispatcher messageBusManager)
-        {
-            this.messageBusManager = messageBusManager;
         }
 
         /// <summary>

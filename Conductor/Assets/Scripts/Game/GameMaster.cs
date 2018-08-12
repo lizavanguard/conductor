@@ -6,8 +6,6 @@ namespace Conductor.Game
 {
     public class GameMaster : MonoBehaviour
     {
-        // 生成したほとんどのインスタンスにこれを食わせる
-        MessageBus.Dispatcher messageBusDispatcher;
         CommandRunner commandRunner;
 
         [SerializeField]
@@ -22,7 +20,6 @@ namespace Conductor.Game
         /// </summary>
         private void Awake()
         {
-            messageBusDispatcher = new MessageBus.Dispatcher();
             commandRunner = new CommandRunner();
 
             // FIXME: マップ作成
@@ -39,32 +36,30 @@ namespace Conductor.Game
         {
             if (Input.GetKey(KeyCode.UpArrow))
             {
-                var command = new Model.CommandModelActorWalk(messageBusDispatcher, mockSoldier.Id, true);
+                var command = new Model.CommandModelActorWalk(mockSoldier, true);
                 commandRunner.Schedule(command);
             }
 
             if (Input.GetKey(KeyCode.DownArrow))
             {
-                var command = new Model.CommandModelActorWalk(messageBusDispatcher, mockSoldier.Id, false);
+                var command = new Model.CommandModelActorWalk(mockSoldier, false);
                 commandRunner.Schedule(command);
             }
 
             if (Input.GetKey(KeyCode.RightArrow))
             {
-                var command = new Model.CommandModelActorRotate(messageBusDispatcher, mockSoldier.Id, true);
+                var command = new Model.CommandModelActorRotate(mockSoldier, true);
                 commandRunner.Schedule(command);
             }
 
             if (Input.GetKey(KeyCode.LeftArrow))
             {
-                var command = new Model.CommandModelActorRotate(messageBusDispatcher, mockSoldier.Id, false);
+                var command = new Model.CommandModelActorRotate(mockSoldier, false);
                 commandRunner.Schedule(command);
             }
 
             // FIXME: after updating each component
             commandRunner.Update();
-
-            messageBusDispatcher.Dispatch();
         }
     }
 }
