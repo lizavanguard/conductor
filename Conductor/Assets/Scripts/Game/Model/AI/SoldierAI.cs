@@ -2,15 +2,19 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SoldierAI : MonoBehaviour {
+namespace Conductor.Game.Model
+{
+    public class SoldierAI
+    {
+        public ActorModelBase owner;
 
-	// Use this for initialization
-	void Start () {
-		
-	}
-	
-	// Update is called once per frame
-	void Update () {
-		
-	}
+        // navigation
+
+        // planning
+
+        public SoldierAI(ActorModelBase owner)
+        {
+            this.owner = owner;
+        }
+    }
 }
