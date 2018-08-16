@@ -8,6 +8,8 @@ namespace Conductor.Game.Model
     // 実際にはこれらのどっちを選ぶかは隊長クラスのplanningから判断される
     public class SoldierPlanning
     {
+        // FIXME: なんとかこれをデータ化したい
+        // 行動はどのoperation派生クラスを用いるかの判断になる
         class Node
         {
             // 前提条件
@@ -19,15 +21,20 @@ namespace Conductor.Game.Model
             // 行動
         }
 
-        //
-        enum ConditionType
+        // 条件ズ
+        public enum ConditionType
         {
-            // 敵の方を向いている
-            // 敵に攻撃できる距離にある
+            // 誰でもいいから敵の方を向いている
+            LookToSomeEnemy,
+
+            // 誰でもいいから敵に攻撃できる距離にある
+            CanHitSomeEnemy,
+
             // 敵に攻撃している
+            HittingSomeEnemy,
         }
 
-        class Condition
+        public class Condition
         {
             // ConditionTypeの0～31に対応するフラグ
             uint firstConditionFlag;
@@ -53,8 +60,23 @@ namespace Conductor.Game.Model
             }
         }
 
+        // 候補のNode
+        Node[] nodeList;
+
+        // プランニングの最終目標
+        Condition goalCondition;
+
+        // 現在構築中のプランニング
+        List<Node> currentPlanningChain;
+
         public SoldierPlanning()
         {
+            // Nodeのモックを用意して動かしてみる
+        }
+
+        public void SetGoal(Condition goal)
+        {
+            goalCondition = goal;
         }
     }
 }
