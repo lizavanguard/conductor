@@ -19,6 +19,17 @@ namespace Conductor.Game.Model
             Condition afterCondition;
 
             // 行動
+            
+        }
+
+        // FIXME: OperationFactoryかOperationBaseに置く
+        public enum OperationType
+        {
+            // 特定地点へ移動する
+            MoveToTargetPoint,
+
+            // 最も近くにいる敵対陣営のキャラのほうを向く
+            LookToNearestEnemy
         }
 
         // 条件ズ
@@ -51,7 +62,7 @@ namespace Conductor.Game.Model
 
             public bool Satisfy(Condition other)
             {
-                return firstConditionFlag == (firstConditionFlag & other.firstConditionFlag);
+                return other.firstConditionFlag == (firstConditionFlag & other.firstConditionFlag);
             }
 
             public bool IsSatisfiedBy(Condition other)
@@ -72,6 +83,13 @@ namespace Conductor.Game.Model
         public SoldierPlanning()
         {
             // Nodeのモックを用意して動かしてみる
+            // 1. 方向転換と攻撃のOperationを書く
+            // 2. OperationTypeからOperationを作るファクトリーを書く
+            // 3. Nodeのコンストラクタを書く
+            // 4. 各Operationに対応したNodeを作る
+            // 5. AI側にもConditionを持たせて定期更新を行う
+            // 6. PlanningChain構築メソッドを書く
+            // 7. 構築、Operation決定、Commandを生成までの流れを書く
         }
 
         public void SetGoal(Condition goal)
