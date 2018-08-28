@@ -72,20 +72,14 @@ namespace Conductor.Game
         // ちゃんと管理クラス作ったら壊す
         void UpdateOperationMock()
         {
-            if (operation == null)
+            if (Input.GetKeyDown(KeyCode.Return))
             {
-                if (Input.GetKeyDown(KeyCode.Return))
-                {
-                    operation = new Model.OperationMove(mockSoldier, commandRunner, targetPosition);
-                }
+
+                operation = new Model.OperationMoveToTargetPoint(mockSoldier, commandRunner, targetPosition);
             }
-            else
+            else if(operation != null)
             {
                 operation.Run();
-                if (operation.HasFinished())
-                {
-                    operation = null;
-                }
             }
         }
     }

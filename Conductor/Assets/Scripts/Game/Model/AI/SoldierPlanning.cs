@@ -83,7 +83,7 @@ namespace Conductor.Game.Model
         public SoldierPlanning()
         {
             // Nodeのモックを用意して動かしてみる
-            // 1. 方向転換と攻撃のOperationを書く
+            // 1. 方向転換と攻撃のOperationを書く 方向転換作業中
             // 2. OperationTypeからOperationを作るファクトリーを書く
             // 3. Nodeのコンストラクタを書く
             // 4. 各Operationに対応したNodeを作る
