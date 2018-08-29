@@ -15,6 +15,9 @@ namespace Conductor.Game
 
         Model.ActorModelSoldier mockSoldier;
 
+        Model.ActorModelBase[] mockEnemies;
+        public Model.ActorModelBase[] MockEnemies { get { return mockEnemies; } }
+
         [SerializeField]
         Vector3 targetPosition;
 
@@ -32,6 +35,14 @@ namespace Conductor.Game
             // キャラクター作成 FIXME: 一旦モックとしてこう作るが管理クラスを設けたい
             actorFactory = new ActorFactory(actorPrefabReference);
             mockSoldier = actorFactory.CreateSoldier();
+
+            mockEnemies = new Model.ActorModelBase[4];
+            for (int i = 0; i < mockEnemies.Length; i++)
+            {
+                var enemy = actorFactory.CreateSoldier();
+                enemy.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, 4.0f);
+                mockEnemies[i] = enemy;
+            }
         }
 
         /// <summary>
@@ -75,7 +86,7 @@ namespace Conductor.Game
             if (Input.GetKeyDown(KeyCode.Return))
             {
 
-                operation = new Model.OperationMoveToTargetPoint(mockSoldier, commandRunner, targetPosition);
+                operation = new Model.OperationLookToNearestEnemy(mockSoldier, commandRunner, this);
             }
             else if(operation != null)
             {

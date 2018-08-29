@@ -19,10 +19,19 @@ namespace Conductor.Game.Model
 
         public override void Run()
         {
-            // FIXME: 一番よさそうな方向をナビゲーションが示す
-
-            // FIXME: 一旦敵を複数作ってみて一番近い敵を探す形に
+            // FIXME: 一番よさそうな方向をナビゲーションが示すように修正
             ActorModelBase target = null;
+            var enemies = gameMaster.MockEnemies;
+            float minSq = float.MaxValue;
+            foreach (var enemy in enemies)
+            {
+                var toEnemy = enemy.ViewBase.transform.localPosition - Owner.ViewBase.transform.localPosition;
+                if (minSq > toEnemy.sqrMagnitude)
+                {
+                    minSq = toEnemy.sqrMagnitude;
+                    target = enemy;
+                }
+            }
 
             if (target == null)
             {
