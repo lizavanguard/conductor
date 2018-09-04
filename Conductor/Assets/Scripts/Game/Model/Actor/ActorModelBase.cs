@@ -9,11 +9,22 @@ namespace Conductor.Game.Model
     {
         static int nextId = 0;
 
-        int id;
+        public enum StateType
+        {
+            Idle,
+            Walk,
+            Attack
+        }
 
+        ActorModelStateBase currentState;
+        protected ActorModelStateBase CurrentState { get { return currentState; } }
+        StateType currentStateType;
+        protected StateType CurrentStateType { get { return CurrentStateType; } } 
+        Dictionary<StateType, ActorModelStateBase> stateMap;
+
+        int id;
         public int Id { get { return id; } }
 
-        // FIXME: ActorViewBaseができたらその参照を持つようにする
         ActorViewBase viewBase;
 
         public ActorViewBase ViewBase { get { return viewBase; } }
@@ -22,7 +33,7 @@ namespace Conductor.Game.Model
 
         public Vector3 HorizontalDirection
         {
-            protected set { horizontalDirection = value; }
+            set { horizontalDirection = value; }
             get { return horizontalDirection; }
         }
 
@@ -37,14 +48,33 @@ namespace Conductor.Game.Model
             // 初期状態をViewに反映
             viewBase.UpdateRotationByDirection(horizontalDirection);
 
+            stateMap = CreateStateMap();
+            currentStateType = StateType.Idle;
+            currentState = stateMap[currentStateType];
+            currentState.OnEnter();
+
             id = nextId;
             nextId++;
         }
+
+        protected abstract Dictionary<StateType, ActorModelStateBase> CreateStateMap();
 
         public abstract void Update();
 
         public abstract void Walk(bool front);
 
         public abstract void Rotate(bool right);
+
+        public void SetState(StateType state)
+        {
+            if (currentStateType != state)
+            {
+                currentState.OnLeave();
+                currentState = stateMap[state];
+                currentState.OnEnter();
+            }
+
+            currentStateType = state;
+        }
     }
 }
