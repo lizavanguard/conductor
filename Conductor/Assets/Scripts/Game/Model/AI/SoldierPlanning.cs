@@ -94,7 +94,10 @@ namespace Conductor.Game.Model
             // 攻撃実装まで
             // 1. ActorModelにステートパターンを書く
             // 2. 通常state作成
-            // 3. 攻撃state作成
+            // 3. 攻撃state作成 kokokara
+            // ViewにPlayAttackAnimationとか生やす
+            // AttackStateのOnEnterで発火
+            // AttackStateのUpdateで監視する
         }
 
         public void SetGoal(Condition goal)
