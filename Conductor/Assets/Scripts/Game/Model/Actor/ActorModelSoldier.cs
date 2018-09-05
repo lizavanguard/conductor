@@ -34,7 +34,10 @@ namespace Conductor.Game.Model
             return stateMap;
         }
 
-        public override void Update() { }
+        public override void Update()
+        {
+            CurrentState.Update();
+        }
 
         public override void Walk(bool front)
         {

@@ -52,6 +52,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4667971888951820}
   - component: {fileID: 114573862752436906}
+  - component: {fileID: 95384768768266722}
   m_Layer: 0
   m_Name: ActorSoldier
   m_TagString: Untagged
@@ -213,6 +214,23 @@ MeshFilter:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1112115279507198}
   m_Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!95 &95384768768266722
+Animator:
+  serializedVersion: 3
+  m_ObjectHideFlags: 1
+  m_PrefabParentObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 100100000}
+  m_GameObject: {fileID: 1576290958965622}
+  m_Enabled: 1
+  m_Avatar: {fileID: 0}
+  m_Controller: {fileID: 9100000, guid: ea198573c2f1fa34aae3f13692e35232, type: 2}
+  m_CullingMode: 0
+  m_UpdateMode: 0
+  m_ApplyRootMotion: 0
+  m_LinearVelocityBlending: 0
+  m_WarningMessage: 
+  m_HasTransformHierarchy: 1
+  m_AllowConstantClipSamplingOptimization: 1
 --- !u!114 &114573862752436906
 MonoBehaviour:
   m_ObjectHideFlags: 1

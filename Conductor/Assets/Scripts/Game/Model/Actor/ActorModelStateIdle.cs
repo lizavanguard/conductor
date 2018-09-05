@@ -29,7 +29,7 @@ namespace Conductor.Game.Model
         {
             float delta = right ? rotateDegree : -rotateDegree;
             var rotationDelta = Quaternion.AngleAxis(delta, Vector3.up);
-            var rotation = Owner.ViewBase.transform.localRotation;
+            var rotation = Owner.ViewBase.transform.localRotation * rotationDelta;
             Owner.ViewBase.transform.localRotation = rotation;
 
             // front更新

@@ -54,6 +54,7 @@ namespace Conductor.Game.Model
             }
 
             bool right = cross > 0.0f;
+
             Owner.Rotate(right);
         }
     }
