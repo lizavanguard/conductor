@@ -19,6 +19,13 @@ namespace Conductor.Game.Model
 
         public override void Run()
         {
+            // hack
+            if (Input.GetKeyDown(KeyCode.Space))
+            {
+                Owner.Attack();
+                return;
+            }
+
             // FIXME: 一番よさそうな方向をナビゲーションが示すように修正
             ActorModelBase target = null;
             var enemies = gameMaster.MockEnemies;

@@ -31,6 +31,9 @@ namespace Conductor.Game.Model
             var walkState = new ActorModelStateSoldierWalk(this, WalkSpeed, RotateDegree);
             stateMap.Add(StateType.Walk, walkState);
 
+            var attackState = new ActorModelStateSoldierAttack(this);
+            stateMap.Add(StateType.Attack, attackState);
+
             return stateMap;
         }
 
@@ -45,6 +48,11 @@ namespace Conductor.Game.Model
 
             // FIXME: Viewに状態通知
             
+        }
+
+        public override void Attack()
+        {
+            CurrentState.Attack();
         }
 
         public override void Rotate(bool right)

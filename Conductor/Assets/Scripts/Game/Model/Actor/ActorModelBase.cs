@@ -65,6 +65,8 @@ namespace Conductor.Game.Model
 
         public abstract void Rotate(bool right);
 
+        public abstract void Attack();
+
         public void SetState(StateType state)
         {
             if (currentStateType != state)

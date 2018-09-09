@@ -36,6 +36,11 @@ namespace Conductor.Game.Model
             Owner.HorizontalDirection = rotation * Vector3.forward;
         }
 
+        public override void Attack()
+        {
+            Owner.SetState(ActorModelBase.StateType.Attack);
+        }
+
         public override void OnEnter()
         { }
 

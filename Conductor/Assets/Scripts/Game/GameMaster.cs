@@ -76,6 +76,16 @@ namespace Conductor.Game
 
             UpdateOperationMock();
 
+            if (mockSoldier != null)
+            {
+                mockSoldier.Update();
+            }
+
+            foreach (var enemy in mockEnemies)
+            {
+                enemy.Update();
+            }
+
             // FIXME: after updating each component
             commandRunner.Update();
         }
