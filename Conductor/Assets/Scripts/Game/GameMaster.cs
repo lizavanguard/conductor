@@ -95,7 +95,7 @@ namespace Conductor.Game
         {
             if (Input.GetKeyDown(KeyCode.Return))
             {
-                operation = new Model.OperationLookToNearestEnemy(mockSoldier, commandRunner, this);
+                operation = new Model.OperationAttackNearestEnemy(mockSoldier, commandRunner, this);
             }
             else if(operation != null)
             {

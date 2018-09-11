@@ -8,7 +8,7 @@ namespace Conductor.Game.Model
     public class ActorModelStateSoldierAttack : ActorModelStateBase
     {
         const int AttackFrame = 15;
-        const int FrameLength = 30;
+        const int FrameLength = 60;
         int frameCount;
 
         public ActorModelStateSoldierAttack(ActorModelBase owner) : base(owner)

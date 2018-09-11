@@ -83,21 +83,14 @@ namespace Conductor.Game.Model
         public SoldierPlanning()
         {
             // Nodeのモックを用意して動かしてみる
-            // 1. 方向転換と攻撃のOperationを書く 方向転換done
+            // 1. 方向転換と攻撃のOperationを書く 攻撃のoperationから
+            // 1.5 各operationに関して生叩きではなくCommandを使うように
             // 2. OperationTypeからOperationを作るファクトリーを書く
             // 3. Nodeのコンストラクタを書く
             // 4. 各Operationに対応したNodeを作る
             // 5. AI側にもConditionを持たせて定期更新を行う
             // 6. PlanningChain構築メソッドを書く
             // 7. 構築、Operation決定、Commandを生成までの流れを書く
-
-            // 攻撃実装まで
-            // 1. ActorModelにステートパターンを書く
-            // 2. 通常state作成
-            // 3. 攻撃state作成 kokokara
-            // ViewにPlayAttackAnimationとか生やす
-            // AttackStateのOnEnterで発火
-            // AttackStateのUpdateで監視する
         }
 
         public void SetGoal(Condition goal)

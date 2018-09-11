@@ -4,15 +4,16 @@ using UnityEngine;
 
 namespace Conductor.Game.Model
 {
-    public class OperationLookToNearestEnemy : OperationBase
+    public class OperationAttackNearestEnemy : OperationBase
     {
-        // 比較用イプシロン ちょっと広めに
-        static readonly float Epsilon = 0.1f;
+        // 比較用イプシロン 攻撃を行うための基準なので、極小でなくてよい
+        const float DistanceThreshold = 1.0f;
+        const float AngleEpsilon = 0.1f;
 
         // FIXME: 本当はナビゲーションのみ受け取る
         GameMaster gameMaster;
 
-        public OperationLookToNearestEnemy(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster) : base(owner, commandRunner)
+        public OperationAttackNearestEnemy(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster) : base(owner, commandRunner)
         {
             this.gameMaster = gameMaster;
         }
@@ -40,22 +41,29 @@ namespace Conductor.Game.Model
 
             var toTarget = target.ViewBase.transform.localPosition - Owner.ViewBase.transform.localPosition;
             toTarget.y = 0.0f;
-
-            if (toTarget.sqrMagnitude < Epsilon * Epsilon)
-            {
-                return;
-            }
-
+            float distance = toTarget.magnitude;
             toTarget.Normalize();
             float cross = Vector3.Cross(Owner.HorizontalDirection, toTarget).y;
-            if (Mathf.Abs(cross) < Epsilon)
+            bool rotate = Mathf.Abs(cross) > AngleEpsilon;
+            if (rotate)
             {
-                return;
+                bool right = cross > 0.0f;
+                Owner.Rotate(right);
             }
 
-            bool right = cross > 0.0f;
-
-            Owner.Rotate(right);
+            // 向きの一致度と距離に応じて全身後退を判別
+            // FIXME: 雑なので調整
+            bool move = Vector3.Dot(toTarget, Owner.HorizontalDirection) > 0.5f
+                && distance > DistanceThreshold;
+            if (move)
+            {
+                var walkCommand = new CommandModelActorWalk(Owner, true);
+                CommandRunner.Schedule(walkCommand);
+            }
+            else if (!rotate)
+            {
+                Owner.Attack();
+            }
         }
     }
 }
