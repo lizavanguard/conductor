@@ -9,7 +9,7 @@ namespace Conductor.Game.Model
     public class SoldierPlanning
     {
         // FIXME: なんとかこれをデータ化したい
-        // 行動はどのoperation派生クラスを用いるかの判断になる
+        // planningChainを作るときはafterとbeforeで変化のあったbitに着目して次の状況を作る
         class Node
         {
             // 前提条件
@@ -19,20 +19,10 @@ namespace Conductor.Game.Model
             Condition afterCondition;
 
             // 行動
-            
+            OperationType operationType;
         }
 
-        // FIXME: OperationFactoryかOperationBaseに置く
-        public enum OperationType
-        {
-            // 特定地点へ移動する
-            MoveToTargetPoint,
-
-            // 最も近くにいる敵対陣営のキャラのほうを向く
-            LookToNearestEnemy
-        }
-
-        // 条件ズ
+        // 条件ズ FIXME: 「行き先の命令を受けている」といった状態も存在する その場合の実際の座標はActorが持つ
         public enum ConditionType
         {
             // 誰でもいいから敵の方を向いている
@@ -48,6 +38,9 @@ namespace Conductor.Game.Model
         public class Condition
         {
             // ConditionTypeの0～31に対応するフラグ
+            // 該当bitがtrue => その条件は成立している
+            // 該当bitがfalse => その条件の成否は不明/不問
+            // 明示的に不成立の条件を入れる時は、専用のbitを作る
             uint firstConditionFlag;
             public uint FirstConditionFlag { get { return firstConditionFlag; } }
 
@@ -83,10 +76,9 @@ namespace Conductor.Game.Model
         public SoldierPlanning()
         {
             // Nodeのモックを用意して動かしてみる
-            // 1. 方向転換と攻撃のOperationを書く 攻撃のoperationから
-            // 1.5 各operationに関して生叩きではなくCommandを使うように
+            // 1. 方向転換と攻撃のOperationを書く
             // 2. OperationTypeからOperationを作るファクトリーを書く
-            // 3. Nodeのコンストラクタを書く
+            // 3. Nodeのコンストラクタを書く kokokara
             // 4. 各Operationに対応したNodeを作る
             // 5. AI側にもConditionを持たせて定期更新を行う
             // 6. PlanningChain構築メソッドを書く
