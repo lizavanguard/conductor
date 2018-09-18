@@ -55,7 +55,8 @@ namespace Conductor.Game.Model
 
             bool right = cross > 0.0f;
 
-            Owner.Rotate(right);
+            var rotateCommand = new CommandModelActorRotate(Owner, right);
+            CommandRunner.Schedule(rotateCommand);
         }
     }
 }

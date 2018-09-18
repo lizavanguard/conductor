@@ -48,7 +48,8 @@ namespace Conductor.Game.Model
             if (rotate)
             {
                 bool right = cross > 0.0f;
-                Owner.Rotate(right);
+                var rotateCommand = new CommandModelActorRotate(Owner, right);
+                CommandRunner.Schedule(rotateCommand);
             }
 
             // 向きの一致度と距離に応じて全身後退を判別
@@ -62,7 +63,8 @@ namespace Conductor.Game.Model
             }
             else if (!rotate)
             {
-                Owner.Attack();
+                var attackCommand = new CommandModelActorAttack(Owner);
+                CommandRunner.Schedule(attackCommand);
             }
         }
     }
