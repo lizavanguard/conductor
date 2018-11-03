@@ -20,6 +20,18 @@ namespace Conductor.Game.Model
 
             // 行動
             OperationType operationType;
+
+            OperationBase operation;
+
+            public Node(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, Condition before, Condition after, OperationType operationType)
+            {
+                this.beforeCondition = before;
+                this.afterCondition = after;
+                this.operationType = operationType;
+
+                var factory = new OperationFactory(owner, commandRunner, gameMaster);
+                operation = factory.Create(operationType);
+            }
         }
 
         // 条件ズ FIXME: 「行き先の命令を受けている」といった状態も存在する その場合の実際の座標はActorが持つ
@@ -78,8 +90,8 @@ namespace Conductor.Game.Model
             // Nodeのモックを用意して動かしてみる
             // 1. 方向転換と攻撃のOperationを書く
             // 2. OperationTypeからOperationを作るファクトリーを書く
-            // 3. Nodeのコンストラクタを書く kokokara
-            // 4. 各Operationに対応したNodeを作る
+            // 3. Nodeのコンストラクタを書
+            // 4. 各Operationに対応したNodeを作る kokokara
             // 5. AI側にもConditionを持たせて定期更新を行う
             // 6. PlanningChain構築メソッドを書く
             // 7. 構築、Operation決定、Commandを生成までの流れを書く
