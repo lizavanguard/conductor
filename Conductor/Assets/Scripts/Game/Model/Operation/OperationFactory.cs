@@ -7,7 +7,7 @@ namespace Conductor.Game.Model
     // FIXME: OperationFactoryかOperationBaseに置く
     public enum OperationType
     {
-        // 特定地点へ移動する
+        // 特定地点へ移動する FIXME: この命令いけてない もうちょっと具体性が必要 「最も近くにいる敵に攻撃できる位置まで移動する」とか
         MoveToTargetPoint,
 
         // 最も近くにいる敵対陣営のキャラのほうを向く

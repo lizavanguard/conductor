@@ -85,21 +85,64 @@ namespace Conductor.Game.Model
         // 現在構築中のプランニング
         List<Node> currentPlanningChain;
 
-        public SoldierPlanning()
+        ActorModelBase owner;
+
+        public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
         {
             // Nodeのモックを用意して動かしてみる
             // 1. 方向転換と攻撃のOperationを書く
             // 2. OperationTypeからOperationを作るファクトリーを書く
             // 3. Nodeのコンストラクタを書
-            // 4. 各Operationに対応したNodeを作る kokokara
-            // 5. AI側にもConditionを持たせて定期更新を行う
+            // 4. 各Operationに対応したNodeをPlanning内に作る
+            // 5. AI側にもConditionを持たせて定期更新を行う kokokara
             // 6. PlanningChain構築メソッドを書く
             // 7. 構築、Operation決定、Commandを生成までの流れを書く
+            // 8: OperationTypeを増築
+
+            nodeList = GenerateOperationNodes(owner, commandRunner, gameMaster);
         }
 
         public void SetGoal(Condition goal)
         {
             goalCondition = goal;
+        }
+
+        // FIXME: 本当は外部ファイルから読み込むべき
+        Node[] GenerateOperationNodes(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
+        {
+            List<Node> newNodeList = new List<Node>();
+
+            // 最も近くにいる敵対陣営のキャラのほうを向く
+            {
+                var beforeList = new ConditionType[]
+                {
+                    ConditionType.LookToSomeEnemy,
+                    ConditionType.CanHitSomeEnemy,
+                    ConditionType.HittingSomeEnemy,
+                };
+                var afterList = new ConditionType[]
+                {
+                    ConditionType.LookToSomeEnemy,
+                };
+                var node = new Node(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.LookToNearestEnemy);
+                newNodeList.Add(node);
+            }
+
+            // 最も近くにいる敵対陣営のキャラを攻撃しようとする
+            {
+                var beforeList = new ConditionType[]
+                {
+                    ConditionType.CanHitSomeEnemy,
+                };
+                var afterList = new ConditionType[]
+                {
+                    ConditionType.HittingSomeEnemy,
+                };
+                var node = new Node(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.AttackNearestEnemy);
+                newNodeList.Add(node);
+            }
+
+            return newNodeList.ToArray();
         }
     }
 }
