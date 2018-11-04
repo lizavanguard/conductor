@@ -21,31 +21,31 @@ namespace Conductor.Game.Model
             // 行動
             OperationType operationType;
 
-            OperationBase operation;
+            public Condition BeforeCondition { get { return beforeCondition; } }
+            public Condition AfterCondition { get { return afterCondition; } }
+
 
             public Node(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, Condition before, Condition after, OperationType operationType)
             {
                 this.beforeCondition = before;
                 this.afterCondition = after;
                 this.operationType = operationType;
-
-                var factory = new OperationFactory(owner, commandRunner, gameMaster);
-                operation = factory.Create(operationType);
             }
         }
 
         // 候補のNode
-        Node[] nodeList;
+        Node[] baseNodeList;
 
         // プランニングの最終目標
         Condition goalCondition;
 
-        // 現在構築中のプランニング
+        // 現在構築済のプランニング
         List<Node> currentPlanningChain;
 
         Condition currentCondition;
 
         ActorModelBase owner;
+        CommandRunner commandRunner;
         GameMaster gameMaster;
 
         public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
@@ -56,15 +56,16 @@ namespace Conductor.Game.Model
             // 3. Nodeのコンストラクタを書
             // 4. 各Operationに対応したNodeをPlanning内に作る
             // 5. AI側にもConditionを持たせて定期更新を行う
-            // 6. PlanningChain構築メソッドを書く kokokara
-            // 7. 構築、Operation決定、Commandを生成までの流れを書く
+            // 6. PlanningChain構築メソッドを書く
+            // 7. 構築、Operation決定、Commandを生成までの流れを書く kokokara
             // 8: OperationTypeを増築
 
-            nodeList = GenerateOperationNodes(owner, commandRunner, gameMaster);
+            baseNodeList = GenerateOperationNodes(owner, commandRunner, gameMaster);
 
             currentCondition = new Condition(new ConditionType[] { });
 
             this.owner = owner;
+            this.commandRunner = commandRunner;
             this.gameMaster = gameMaster;
         }
 
@@ -76,6 +77,66 @@ namespace Conductor.Game.Model
         public void UpdateCurrentCondition()
         {
             currentCondition.UpdateCondition(owner, gameMaster);
+        }
+
+        public void BuildPllaningChain()
+        {
+            // 最終ゴールを現在ゴールとして初期化
+            currentPlanningChain.Clear();
+            ChainNode(currentPlanningChain, goalCondition);
+        }
+
+        List<Node> ChainNode(List<Node> chain, Condition goal)
+        {
+            // currentStateがゴールを満たしているかどうかチェック(終了判定)
+            if (currentCondition.Satisfy(goal))
+            {
+                return chain;
+            }
+
+            // 現在ゴールを満たすafterConditionを持ったNodeを一覧化
+            var newNodeList = new List<Node>();
+            foreach (var node in baseNodeList)
+            {
+                if (node.AfterCondition.Satisfy(goal))
+                {
+                    newNodeList.Add(node);
+                }
+            }
+
+            // なかったら探索打ち止め
+            if (newNodeList.Count == 0)
+            {
+                return null;
+            }
+
+            foreach (var newNode in newNodeList)
+            {
+                // 千日手チェック FIXME: 千日手の条件はもうちょっと考えたほうがよさげ
+                if (chain.Contains(newNode))
+                {
+                    continue;
+                }
+
+                // よしなに(最初は順番に)選ぶ 現在の状態に最も近付くようなやつがいい
+                var tempChain = new List<Node>(chain);
+                tempChain.Add(newNode);
+
+                // 現在ゴールを更新
+                var tempGoal = newNode.BeforeCondition;
+
+                var newChain = ChainNode(tempChain, tempGoal);
+
+                // 最初に見つかったものを無条件に選んでいるが、複数から選択したかったらちょっと考える
+                // でもそれは要するに総当りなので上のnewNodeの選択方法を改善したほうがいいと思う
+                if (newChain != null)
+                {
+                    return newChain;
+                }
+            }
+
+            // どれも行き詰まりか千日手
+            return null;
         }
 
         // FIXME: 本当は外部ファイルから読み込むべき
