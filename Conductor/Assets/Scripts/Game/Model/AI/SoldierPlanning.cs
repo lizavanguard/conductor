@@ -46,6 +46,7 @@ namespace Conductor.Game.Model
         Condition currentCondition;
 
         ActorModelBase owner;
+        GameMaster gameMaster;
 
         public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
         {
@@ -54,19 +55,27 @@ namespace Conductor.Game.Model
             // 2. OperationTypeからOperationを作るファクトリーを書く
             // 3. Nodeのコンストラクタを書
             // 4. 各Operationに対応したNodeをPlanning内に作る
-            // 5. AI側にもConditionを持たせて定期更新を行う kokokara
-            // 6. PlanningChain構築メソッドを書く
+            // 5. AI側にもConditionを持たせて定期更新を行う
+            // 6. PlanningChain構築メソッドを書く kokokara
             // 7. 構築、Operation決定、Commandを生成までの流れを書く
             // 8: OperationTypeを増築
 
             nodeList = GenerateOperationNodes(owner, commandRunner, gameMaster);
 
             currentCondition = new Condition(new ConditionType[] { });
+
+            this.owner = owner;
+            this.gameMaster = gameMaster;
         }
 
         public void SetGoal(Condition goal)
         {
             goalCondition = goal;
+        }
+
+        public void UpdateCurrentCondition()
+        {
+            currentCondition.UpdateCondition(owner, gameMaster);
         }
 
         // FIXME: 本当は外部ファイルから読み込むべき

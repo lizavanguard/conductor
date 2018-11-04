@@ -49,6 +49,9 @@ namespace Conductor.Game.Model
         // FIXME: 共有範囲で更新ロジックを区切ったほうがいい 例えば戦場全体で共通な状態は1フレームに1回更新すればよい
         public void UpdateCondition(ActorModelBase owner, GameMaster gameMaster)
         {
+            UpdateLookToEnemyCondition(owner, gameMaster);
+            UpdateCanHitSomeEnemyCondition(owner, gameMaster);
+            UpdateHittingSomeEnemyCondition(owner, gameMaster);
         }
 
         void SetFlag(ConditionType type, bool flag)
@@ -94,6 +97,32 @@ namespace Conductor.Game.Model
             SetFlag(ConditionType.LookToSomeEnemy, directionEqual);
         }
 
+        // 誰でもいいから敵に攻撃できる距離にある
+        void UpdateCanHitSomeEnemyCondition(ActorModelBase owner, GameMaster gameMaster)
+        {
+            bool near = false;
+            foreach (var enemy in gameMaster.MockEnemies)
+            {
+                Vector3 toEnemy = enemy.Position - owner.Position;
+                toEnemy.y = 0.0f;
+
+                if (toEnemy.sqrMagnitude < Constant.ActorPositionDistanceSqEpsilon)
+                {
+                    near = true;
+                    break;
+                }
+            }
+
+            SetFlag(ConditionType.CanHitSomeEnemy, near);
+        }
+
+        // 敵に攻撃している
+        void UpdateHittingSomeEnemyCondition(ActorModelBase owner, GameMaster gameMaster)
+        {
+            // 雑に攻撃状態かどうか見るだけ FIXME: 攻撃が敵に当たっているかどうかも見るべき？
+            bool isHitting = (ActorModelStateSoldierAttack)owner.CurrentState != null;
+            SetFlag(ConditionType.HittingSomeEnemy, isHitting);
+        }
 
         #endregion
     }

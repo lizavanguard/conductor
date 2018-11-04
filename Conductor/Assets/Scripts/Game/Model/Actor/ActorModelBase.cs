@@ -17,7 +17,7 @@ namespace Conductor.Game.Model
         }
 
         ActorModelStateBase currentState;
-        protected ActorModelStateBase CurrentState { get { return currentState; } }
+        public ActorModelStateBase CurrentState { get { return currentState; } }
         StateType currentStateType;
         protected StateType CurrentStateType { get { return CurrentStateType; } } 
         Dictionary<StateType, ActorModelStateBase> stateMap;
