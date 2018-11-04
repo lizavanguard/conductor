@@ -8,7 +8,6 @@ namespace Conductor.Game.Model
     {
         // 比較用イプシロン 攻撃を行うための基準なので、極小でなくてよい
         const float DistanceThreshold = 1.0f;
-        const float AngleEpsilon = 0.1f;
 
         // FIXME: 本当はナビゲーションのみ受け取る
         GameMaster gameMaster;
@@ -26,7 +25,7 @@ namespace Conductor.Game.Model
             float minSq = float.MaxValue;
             foreach (var enemy in enemies)
             {
-                var toEnemy = enemy.ViewBase.transform.localPosition - Owner.ViewBase.transform.localPosition;
+                var toEnemy = enemy.Position - Owner.Position;
                 if (minSq > toEnemy.sqrMagnitude)
                 {
                     minSq = toEnemy.sqrMagnitude;
@@ -39,12 +38,12 @@ namespace Conductor.Game.Model
                 return;
             }
 
-            var toTarget = target.ViewBase.transform.localPosition - Owner.ViewBase.transform.localPosition;
+            var toTarget = target.Position - Owner.Position;
             toTarget.y = 0.0f;
             float distance = toTarget.magnitude;
             toTarget.Normalize();
             float cross = Vector3.Cross(Owner.HorizontalDirection, toTarget).y;
-            bool rotate = Mathf.Abs(cross) > AngleEpsilon;
+            bool rotate = Mathf.Abs(cross) > Constant.ActorAngleCrossEpsilon;
             if (rotate)
             {
                 bool right = cross > 0.0f;

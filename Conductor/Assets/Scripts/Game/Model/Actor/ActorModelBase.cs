@@ -31,6 +31,8 @@ namespace Conductor.Game.Model
 
         Vector3 horizontalDirection;
 
+        public Vector3 Position { get { return ViewBase.transform.localPosition; } }
+
         public Vector3 HorizontalDirection
         {
             set { horizontalDirection = value; }

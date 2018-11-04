@@ -25,7 +25,7 @@ namespace Conductor.Game.Model
             float minSq = float.MaxValue;
             foreach (var enemy in enemies)
             {
-                var toEnemy = enemy.ViewBase.transform.localPosition - Owner.ViewBase.transform.localPosition;
+                var toEnemy = enemy.Position - Owner.Position;
                 if (minSq > toEnemy.sqrMagnitude)
                 {
                     minSq = toEnemy.sqrMagnitude;
@@ -38,7 +38,7 @@ namespace Conductor.Game.Model
                 return;
             }
 
-            var toTarget = target.ViewBase.transform.localPosition - Owner.ViewBase.transform.localPosition;
+            var toTarget = target.Position - Owner.Position;
             toTarget.y = 0.0f;
 
             if (toTarget.sqrMagnitude < Epsilon * Epsilon)
@@ -48,7 +48,7 @@ namespace Conductor.Game.Model
 
             toTarget.Normalize();
             float cross = Vector3.Cross(Owner.HorizontalDirection, toTarget).y;
-            if (Mathf.Abs(cross) < Epsilon)
+            if (Mathf.Abs(cross) < Constant.ActorAngleCrossEpsilon)
             {
                 return;
             }

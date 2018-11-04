@@ -45,7 +45,13 @@ namespace Conductor.Game.Model
             return other.Satisfy(this);
         }
 
-        public void SetFlag(ConditionType type, bool flag)
+        // FIXME: もしかしたらactor側の機能として実装したほうが自然かも actor都合がどのくらいかによりそう
+        // FIXME: 共有範囲で更新ロジックを区切ったほうがいい 例えば戦場全体で共通な状態は1フレームに1回更新すればよい
+        public void UpdateCondition(ActorModelBase owner, GameMaster gameMaster)
+        {
+        }
+
+        void SetFlag(ConditionType type, bool flag)
         {
             var mask = 1U << (int)type;
 
@@ -58,5 +64,37 @@ namespace Conductor.Game.Model
                 conditionFlag &= ~mask;
             }
         }
+
+        #region 状態更新メソッドたち
+        // 誰でもいいから敵の方を向いている
+        void UpdateLookToEnemyCondition(ActorModelBase owner, GameMaster gameMaster)
+        {
+            Vector3 ownerDirection = owner.HorizontalDirection;
+
+            bool directionEqual = false;
+            foreach (var enemy in gameMaster.MockEnemies)
+            {
+                Vector3 toEnemy = enemy.Position - owner.Position;
+                toEnemy.y = 0.0f;
+
+                if (toEnemy.sqrMagnitude < Constant.ActorPositionDistanceSqEpsilon)
+                {
+                    continue;
+                }
+
+                toEnemy.Normalize();
+                float cross = Vector3.Cross(toEnemy, ownerDirection).y;
+                if (Mathf.Abs(cross) < Constant.ActorAngleCrossEpsilon)
+                {
+                    directionEqual = true;
+                    break;
+                }
+            }
+
+            SetFlag(ConditionType.LookToSomeEnemy, directionEqual);
+        }
+
+
+        #endregion
     }
 }
