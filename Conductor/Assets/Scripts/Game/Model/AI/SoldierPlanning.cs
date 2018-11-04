@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 namespace Conductor.Game.Model
@@ -23,6 +24,7 @@ namespace Conductor.Game.Model
 
             public Condition BeforeCondition { get { return beforeCondition; } }
             public Condition AfterCondition { get { return afterCondition; } }
+            public OperationType OperationType { get { return operationType; } }
 
 
             public Node(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, Condition before, Condition after, OperationType operationType)
@@ -44,9 +46,13 @@ namespace Conductor.Game.Model
 
         Condition currentCondition;
 
+        OperationBase currentOperation;
+
         ActorModelBase owner;
         CommandRunner commandRunner;
         GameMaster gameMaster;
+
+        public OperationBase CurrentOperation { get { return currentOperation; } }
 
         public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
         {
@@ -57,8 +63,8 @@ namespace Conductor.Game.Model
             // 4. 各Operationに対応したNodeをPlanning内に作る
             // 5. AI側にもConditionを持たせて定期更新を行う
             // 6. PlanningChain構築メソッドを書く
-            // 7. 構築、Operation決定、Commandを生成までの流れを書く kokokara
-            // 8: OperationTypeを増築
+            // 7. 構築、Operation決定、Commandを生成までの流れを書く たぶんおｋ
+            // 8: OperationTypeを増築 kokokara
 
             baseNodeList = GenerateOperationNodes(owner, commandRunner, gameMaster);
 
@@ -79,11 +85,49 @@ namespace Conductor.Game.Model
             currentCondition.UpdateCondition(owner, gameMaster);
         }
 
+        public void UpdatePlanning()
+        {
+            if (currentPlanningChain == null || currentPlanningChain.Count == 0)
+            {
+                currentOperation = null;
+                return;
+            }
+
+            // もしかすると1フレームで複数枚抜きする必要あるかも
+            var currentNode = currentPlanningChain.Last();
+            if (currentCondition.Satisfy(currentNode.AfterCondition))
+            {
+                currentPlanningChain.RemoveAt(currentPlanningChain.Count - 1);
+
+                if (currentPlanningChain.Count > 0)
+                {
+                    var nextNode = currentPlanningChain.Last();
+                    var factory = new OperationFactory(owner, commandRunner, gameMaster);
+                    currentOperation = factory.Create(nextNode.OperationType);
+                }
+                else
+                {
+                    // 最後の行動を完了した直後
+                    currentOperation = null;
+                    BuildPllaningChain();
+                }
+            }
+        }
+
         public void BuildPllaningChain()
         {
             // 最終ゴールを現在ゴールとして初期化
+            currentOperation = null;
             currentPlanningChain.Clear();
-            ChainNode(currentPlanningChain, goalCondition);
+            currentPlanningChain = ChainNode(currentPlanningChain, goalCondition);
+
+            if (currentPlanningChain != null && currentPlanningChain.Count > 0)
+            {
+                // 最初のoperation作成
+                var node = currentPlanningChain.Last();
+                var factory = new OperationFactory(owner, commandRunner, gameMaster);
+                currentOperation = factory.Create(node.OperationType);
+            }
         }
 
         List<Node> ChainNode(List<Node> chain, Condition goal)

@@ -18,6 +18,8 @@ namespace Conductor.Game
         Model.ActorModelBase[] mockEnemies;
         public Model.ActorModelBase[] MockEnemies { get { return mockEnemies; } }
 
+        Model.SoldierAI[] mockAIs;
+
         [SerializeField]
         Vector3 targetPosition;
 
@@ -37,11 +39,14 @@ namespace Conductor.Game
             mockSoldier = actorFactory.CreateSoldier();
 
             mockEnemies = new Model.ActorModelBase[4];
+            mockAIs = new Model.SoldierAI[4];
             for (int i = 0; i < mockEnemies.Length; i++)
             {
                 var enemy = actorFactory.CreateSoldier();
                 enemy.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, 4.0f);
                 mockEnemies[i] = enemy;
+
+                mockAIs[i] = new Model.SoldierAI(enemy, commandRunner, this);
             }
         }
 
@@ -74,7 +79,10 @@ namespace Conductor.Game
                 commandRunner.Schedule(command);
             }
 
-            UpdateOperationMock();
+            foreach (var ai in mockAIs)
+            {
+                ai.Update();
+            }
 
             if (mockSoldier != null)
             {
@@ -88,19 +96,6 @@ namespace Conductor.Game
 
             // FIXME: after updating each component
             commandRunner.Update();
-        }
-
-        // ちゃんと管理クラス作ったら壊す
-        void UpdateOperationMock()
-        {
-            if (Input.GetKeyDown(KeyCode.Return))
-            {
-                operation = new Model.OperationAttackNearestEnemy(mockSoldier, commandRunner, this);
-            }
-            else if(operation != null)
-            {
-                operation.Run();
-            }
         }
     }
 }
