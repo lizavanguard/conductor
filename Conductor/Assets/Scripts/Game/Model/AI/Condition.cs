@@ -120,7 +120,7 @@ namespace Conductor.Game.Model
         void UpdateHittingSomeEnemyCondition(ActorModelBase owner, GameMaster gameMaster)
         {
             // 雑に攻撃状態かどうか見るだけ FIXME: 攻撃が敵に当たっているかどうかも見るべき？
-            bool isHitting = (ActorModelStateSoldierAttack)owner.CurrentState != null;
+            bool isHitting = owner.CurrentState as ActorModelStateSoldierAttack != null;
             SetFlag(ConditionType.HittingSomeEnemy, isHitting);
         }
 
