@@ -37,13 +37,10 @@ namespace Conductor.Game.Model
                 case OperationType.MoveToTargetPoint:
                     // FIXME: targetPointは命令を受けたownerが持っているはずなのでownerから受け取る
                     return new OperationMoveToTargetPoint(owner, commandRunner, Vector3.zero);
-                    break;
                 case OperationType.LookToNearestEnemy:
                     return new OperationLookToNearestEnemy(owner, commandRunner, gameMaster);
-                    break;
                 case OperationType.AttackNearestEnemy:
                     return new OperationAttackNearestEnemy(owner, commandRunner, gameMaster);
-                    break;
                 default:
                     break;
             }

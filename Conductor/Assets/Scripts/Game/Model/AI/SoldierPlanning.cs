@@ -64,7 +64,10 @@ namespace Conductor.Game.Model
             // 5. AI側にもConditionを持たせて定期更新を行う
             // 6. PlanningChain構築メソッドを書く
             // 7. 構築、Operation決定、Commandを生成までの流れを書く たぶんおｋ
-            // 8: OperationTypeを増築 kokokara
+            // 8: OperationTypeを増築
+            // CanHitSomeEnemyの状態更新を修正(捕捉して接近できる、に変える)
+            // 索敵する行動を追加
+            // いれば殴る、いなければ索敵する、のAIを作ってみる
 
             baseNodeList = GenerateOperationNodes(owner, commandRunner, gameMaster);
 

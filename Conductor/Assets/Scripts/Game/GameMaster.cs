@@ -48,6 +48,11 @@ namespace Conductor.Game
 
                 mockAIs[i] = new Model.SoldierAI(enemy, commandRunner, this);
             }
+
+            foreach (var ai in mockAIs)
+            {
+                ai.Initialize();
+            }
         }
 
         /// <summary>

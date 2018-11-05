@@ -10,7 +10,7 @@ namespace Conductor.Game.Model
         // 誰でもいいから敵の方を向いている
         LookToSomeEnemy,
 
-        // 誰でもいいから敵に攻撃できる距離にある
+        // 移動して攻撃可能な敵を発見している
         CanHitSomeEnemy,
 
         // 敵に攻撃している
