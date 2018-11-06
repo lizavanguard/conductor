@@ -198,7 +198,7 @@ namespace Conductor.Game.Model
                 var beforeList = new ConditionType[]
                 {
                     ConditionType.LookToSomeEnemy,
-                    ConditionType.CanHitSomeEnemy,
+                    ConditionType.CanTargetSomeEnemy,
                     ConditionType.HittingSomeEnemy,
                 };
                 var afterList = new ConditionType[]
@@ -213,7 +213,7 @@ namespace Conductor.Game.Model
             {
                 var beforeList = new ConditionType[]
                 {
-                    ConditionType.CanHitSomeEnemy,
+                    ConditionType.CanTargetSomeEnemy,
                 };
                 var afterList = new ConditionType[]
                 {

@@ -11,7 +11,7 @@ namespace Conductor.Game.Model
         LookToSomeEnemy,
 
         // 移動して攻撃可能な敵を発見している
-        CanHitSomeEnemy,
+        CanTargetSomeEnemy,
 
         // 敵に攻撃している
         HittingSomeEnemy,
@@ -50,7 +50,7 @@ namespace Conductor.Game.Model
         public void UpdateCondition(ActorModelBase owner, GameMaster gameMaster)
         {
             UpdateLookToEnemyCondition(owner, gameMaster);
-            UpdateCanHitSomeEnemyCondition(owner, gameMaster);
+            UpdateCanTargetSomeEnemyCondition(owner, gameMaster);
             UpdateHittingSomeEnemyCondition(owner, gameMaster);
         }
 
@@ -97,8 +97,8 @@ namespace Conductor.Game.Model
             SetFlag(ConditionType.LookToSomeEnemy, directionEqual);
         }
 
-        // 誰でもいいから敵に攻撃できる距離にある
-        void UpdateCanHitSomeEnemyCondition(ActorModelBase owner, GameMaster gameMaster)
+        // 誰でもいいから敵にタゲ取れる距離にある
+        void UpdateCanTargetSomeEnemyCondition(ActorModelBase owner, GameMaster gameMaster)
         {
             bool near = false;
             foreach (var enemy in gameMaster.MockEnemies)
@@ -106,14 +106,14 @@ namespace Conductor.Game.Model
                 Vector3 toEnemy = enemy.Position - owner.Position;
                 toEnemy.y = 0.0f;
 
-                if (toEnemy.sqrMagnitude < Constant.ActorPositionDistanceSqEpsilon)
+                if (toEnemy.sqrMagnitude < Constant.SoldierTargettingDistanceSqThreshold)
                 {
                     near = true;
                     break;
                 }
             }
 
-            SetFlag(ConditionType.CanHitSomeEnemy, near);
+            SetFlag(ConditionType.CanTargetSomeEnemy, near);
         }
 
         // 敵に攻撃している

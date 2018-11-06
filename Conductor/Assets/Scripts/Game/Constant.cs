@@ -15,5 +15,9 @@ namespace Conductor
 
         // 攻撃が届くかどうかの閾値 FIXME: 勢い余って定数化したけどこれActorModelBaseに個々に定義するやつだわ
         public const float ActorAttackDistanceThreshold = 1.0f;
+
+        // 歩兵交戦距離の閾値 FIXME: 勢い余って定数化したけどこれActorModelBaseに個々に定義するやつだわ 数値も割とザル
+        public const float SoldierTargettingDistanceThreshold = 10.0f;
+        public const float SoldierTargettingDistanceSqThreshold = SoldierTargettingDistanceThreshold * SoldierTargettingDistanceThreshold;
     }
 }
