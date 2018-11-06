@@ -18,11 +18,13 @@ namespace Conductor.Game.Model
         public OperationSearchEnemy(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster) : base(owner, commandRunner)
         {
             this.gameMaster = gameMaster;
+            nextTargetPosition = owner.Position;
         }
 
         public override void Run()
         {
             // FIXME: 一番よさそうな方向をナビゲーションが示すように修正
+
             var enemies = gameMaster.MockEnemies;
             float minSq = float.MaxValue;
             foreach (var enemy in enemies)
@@ -48,6 +50,8 @@ namespace Conductor.Game.Model
 
                 // 雑に3mずつチェック
                 nextTargetPosition = Owner.Position + direction * 3.0f;
+
+                Debug.Log(nextTargetPosition.ToString());
             }
 
             float distance = toTarget.magnitude;
@@ -63,16 +67,11 @@ namespace Conductor.Game.Model
 
             // 向きの一致度と距離に応じて全身後退を判別
             // FIXME: 雑なので調整
-            bool move = Vector3.Dot(toTarget, Owner.HorizontalDirection) > 0.5f && distance > DistanceThreshold;
+            bool move = Vector3.Dot(toTarget, Owner.HorizontalDirection) > 0.5f && distance > Constant.ActorPositionDistanceEpsilon;
             if (move)
             {
                 var walkCommand = new CommandModelActorWalk(Owner, true);
                 CommandRunner.Schedule(walkCommand);
-            }
-            else if (!rotate)
-            {
-                var attackCommand = new CommandModelActorAttack(Owner);
-                CommandRunner.Schedule(attackCommand);
             }
         }
     }

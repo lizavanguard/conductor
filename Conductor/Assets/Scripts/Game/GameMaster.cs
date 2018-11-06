@@ -18,7 +18,8 @@ namespace Conductor.Game
         Model.ActorModelBase[] mockEnemies;
         public Model.ActorModelBase[] MockEnemies { get { return mockEnemies; } }
 
-        Model.SoldierAI[] mockAIs;
+        Model.SoldierAI[] mockEnemyAIs;
+        Model.SoldierAI mockSoldierAI;
 
         [SerializeField]
         Vector3 targetPosition;
@@ -38,21 +39,27 @@ namespace Conductor.Game
             actorFactory = new ActorFactory(actorPrefabReference);
             mockSoldier = actorFactory.CreateSoldier();
 
+            // AI動作確認のため敵から遠くに
+            mockSoldier.ViewBase.transform.localPosition = new Vector3(0.0f, 0.0f, -20.0f);
+
             mockEnemies = new Model.ActorModelBase[4];
-            mockAIs = new Model.SoldierAI[4];
+            mockEnemyAIs = new Model.SoldierAI[4];
             for (int i = 0; i < mockEnemies.Length; i++)
             {
                 var enemy = actorFactory.CreateSoldier();
                 enemy.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, 4.0f);
                 mockEnemies[i] = enemy;
 
-                mockAIs[i] = new Model.SoldierAI(enemy, commandRunner, this);
+                mockEnemyAIs[i] = new Model.SoldierAI(enemy, commandRunner, this);
             }
 
-            foreach (var ai in mockAIs)
+            foreach (var ai in mockEnemyAIs)
             {
                 ai.Initialize();
             }
+
+            mockSoldierAI = new Model.SoldierAI(mockSoldier, commandRunner, this);
+            mockSoldierAI.Initialize();
         }
 
         /// <summary>
@@ -84,9 +91,10 @@ namespace Conductor.Game
                 commandRunner.Schedule(command);
             }
 
-            foreach (var ai in mockAIs)
+            foreach (var ai in mockEnemyAIs)
             {
-                ai.Update();
+                // 敵 == enemyMockとして味方用AIとしての実装しかしていないので、敵対陣営の概念を実装するまで更新切る
+                // ai.Update();
             }
 
             if (mockSoldier != null)
@@ -97,6 +105,11 @@ namespace Conductor.Game
             foreach (var enemy in mockEnemies)
             {
                 enemy.Update();
+            }
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                mockSoldierAI.Update();
             }
 
             // FIXME: after updating each component

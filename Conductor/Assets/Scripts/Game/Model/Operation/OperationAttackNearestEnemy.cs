@@ -6,9 +6,6 @@ namespace Conductor.Game.Model
 {
     public class OperationAttackNearestEnemy : OperationBase
     {
-        // 比較用イプシロン 攻撃を行うための基準なので、極小でなくてよい
-        const float DistanceThreshold = 1.0f;
-
         // FIXME: 本当はナビゲーションのみ受け取る
         GameMaster gameMaster;
 
@@ -53,8 +50,7 @@ namespace Conductor.Game.Model
 
             // 向きの一致度と距離に応じて全身後退を判別
             // FIXME: 雑なので調整
-            bool move = Vector3.Dot(toTarget, Owner.HorizontalDirection) > 0.5f
-                && distance > DistanceThreshold;
+            bool move = Vector3.Dot(toTarget, Owner.HorizontalDirection) > 0.5f && distance > Constant.ActorAttackDistanceThreshold;
             if (move)
             {
                 var walkCommand = new CommandModelActorWalk(Owner, true);

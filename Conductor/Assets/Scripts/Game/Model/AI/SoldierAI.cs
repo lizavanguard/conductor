@@ -39,6 +39,12 @@ namespace Conductor.Game.Model
             {
                 planning.CurrentOperation.Run();
             }
+
+            // ゴール未達成かつchainがないならリビルド
+            if (!planning.GoalIsSatisfied() && !planning.HasPlanningChain())
+            {
+                planning.BuildPllaningChain();
+            }
         }
 
     }

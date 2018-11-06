@@ -15,6 +15,9 @@ namespace Conductor.Game.Model
 
         // 最も近くにいる敵対陣営のキャラを攻撃しようとする
         AttackNearestEnemy,
+
+        // ターゲット取れる敵が見つかるまで索敵
+        SearchEnemy,
     }
 
     public class OperationFactory
@@ -41,6 +44,8 @@ namespace Conductor.Game.Model
                     return new OperationLookToNearestEnemy(owner, commandRunner, gameMaster);
                 case OperationType.AttackNearestEnemy:
                     return new OperationAttackNearestEnemy(owner, commandRunner, gameMaster);
+                case OperationType.SearchEnemy:
+                    return new OperationSearchEnemy(owner, commandRunner, gameMaster);
                 default:
                     break;
             }

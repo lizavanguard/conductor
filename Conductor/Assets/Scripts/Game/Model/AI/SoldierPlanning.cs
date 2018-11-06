@@ -56,22 +56,10 @@ namespace Conductor.Game.Model
 
         public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
         {
-            // Nodeのモックを用意して動かしてみる
-            // 1. 方向転換と攻撃のOperationを書く
-            // 2. OperationTypeからOperationを作るファクトリーを書く
-            // 3. Nodeのコンストラクタを書
-            // 4. 各Operationに対応したNodeをPlanning内に作る
-            // 5. AI側にもConditionを持たせて定期更新を行う
-            // 6. PlanningChain構築メソッドを書く
-            // 7. 構築、Operation決定、Commandを生成までの流れを書く たぶんおｋ
-            // 8: OperationTypeを増築
-            // CanHitSomeEnemyの状態更新を修正(捕捉して接近できる、に変える) ok
-            // 索敵する行動を追加
-            // いれば殴る、いなければ索敵する、のAIを作ってみる
-
             baseNodeList = GenerateOperationNodes(owner, commandRunner, gameMaster);
 
             currentCondition = new Condition(new ConditionType[] { });
+            currentPlanningChain = new List<Node>();
 
             this.owner = owner;
             this.commandRunner = commandRunner;
@@ -124,6 +112,10 @@ namespace Conductor.Game.Model
             currentPlanningChain.Clear();
             currentPlanningChain = ChainNode(currentPlanningChain, goalCondition);
 
+            foreach (var node in currentPlanningChain)
+            {
+                Debug.Log(node.OperationType.ToString());
+            }
             if (currentPlanningChain != null && currentPlanningChain.Count > 0)
             {
                 // 最初のoperation作成
@@ -131,6 +123,16 @@ namespace Conductor.Game.Model
                 var factory = new OperationFactory(owner, commandRunner, gameMaster);
                 currentOperation = factory.Create(node.OperationType);
             }
+        }
+
+        public bool GoalIsSatisfied()
+        {
+            return currentCondition.Satisfy(goalCondition);
+        }
+
+        public bool HasPlanningChain()
+        {
+            return currentPlanningChain != null && currentPlanningChain.Count > 0;
         }
 
         List<Node> ChainNode(List<Node> chain, Condition goal)
@@ -197,9 +199,6 @@ namespace Conductor.Game.Model
             {
                 var beforeList = new ConditionType[]
                 {
-                    ConditionType.LookToSomeEnemy,
-                    ConditionType.CanTargetSomeEnemy,
-                    ConditionType.HittingSomeEnemy,
                 };
                 var afterList = new ConditionType[]
                 {
@@ -220,6 +219,19 @@ namespace Conductor.Game.Model
                     ConditionType.HittingSomeEnemy,
                 };
                 var node = new Node(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.AttackNearestEnemy);
+                newNodeList.Add(node);
+            }
+
+            // 攻撃相手が見つかるまで索敵
+            {
+                var beforeList = new ConditionType[]
+                {
+                };
+                var afterList = new ConditionType[]
+                {
+                    ConditionType.CanTargetSomeEnemy,
+                };
+                var node = new Node(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.SearchEnemy);
                 newNodeList.Add(node);
             }
 
