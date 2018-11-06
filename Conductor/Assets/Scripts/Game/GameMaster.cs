@@ -15,6 +15,12 @@ namespace Conductor.Game
 
         Model.ActorModelSoldier mockSoldier;
 
+        Model.ActorModelBase[] mockEnemies;
+        public Model.ActorModelBase[] MockEnemies { get { return mockEnemies; } }
+
+        Model.SoldierAI[] mockEnemyAIs;
+        Model.SoldierAI mockSoldierAI;
+
         [SerializeField]
         Vector3 targetPosition;
 
@@ -32,6 +38,28 @@ namespace Conductor.Game
             // キャラクター作成 FIXME: 一旦モックとしてこう作るが管理クラスを設けたい
             actorFactory = new ActorFactory(actorPrefabReference);
             mockSoldier = actorFactory.CreateSoldier();
+
+            // AI動作確認のため敵から遠くに
+            mockSoldier.ViewBase.transform.localPosition = new Vector3(0.0f, 0.0f, -20.0f);
+
+            mockEnemies = new Model.ActorModelBase[4];
+            mockEnemyAIs = new Model.SoldierAI[4];
+            for (int i = 0; i < mockEnemies.Length; i++)
+            {
+                var enemy = actorFactory.CreateSoldier();
+                enemy.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, 4.0f);
+                mockEnemies[i] = enemy;
+
+                mockEnemyAIs[i] = new Model.SoldierAI(enemy, commandRunner, this);
+            }
+
+            foreach (var ai in mockEnemyAIs)
+            {
+                ai.Initialize();
+            }
+
+            mockSoldierAI = new Model.SoldierAI(mockSoldier, commandRunner, this);
+            mockSoldierAI.Initialize();
         }
 
         /// <summary>
@@ -63,30 +91,29 @@ namespace Conductor.Game
                 commandRunner.Schedule(command);
             }
 
-            UpdateOperationMock();
+            foreach (var ai in mockEnemyAIs)
+            {
+                // 敵 == enemyMockとして味方用AIとしての実装しかしていないので、敵対陣営の概念を実装するまで更新切る
+                // ai.Update();
+            }
+
+            if (mockSoldier != null)
+            {
+                mockSoldier.Update();
+            }
+
+            foreach (var enemy in mockEnemies)
+            {
+                enemy.Update();
+            }
+
+            if (Input.GetKey(KeyCode.Space))
+            {
+                mockSoldierAI.Update();
+            }
 
             // FIXME: after updating each component
             commandRunner.Update();
-        }
-
-        // ちゃんと管理クラス作ったら壊す
-        void UpdateOperationMock()
-        {
-            if (operation == null)
-            {
-                if (Input.GetKeyDown(KeyCode.Return))
-                {
-                    operation = new Model.OperationMove(mockSoldier, commandRunner, targetPosition);
-                }
-            }
-            else
-            {
-                operation.Run();
-                if (operation.HasFinished())
-                {
-                    operation = null;
-                }
-            }
         }
     }
 }

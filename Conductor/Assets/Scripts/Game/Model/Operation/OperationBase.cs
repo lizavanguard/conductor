@@ -19,7 +19,5 @@ namespace Conductor.Game.Model
         }
 
         public abstract void Run();
-
-        public abstract bool HasFinished();
     }
 }

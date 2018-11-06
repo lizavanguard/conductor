@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace Conductor.Game.Model
 {
-    public class OperationMove : OperationBase
+    public class OperationMoveToTargetPoint : OperationBase
     {
         // 比較用イプシロン ちょっと広めに
         static readonly float Epsilon = 0.1f;
         Vector3 targetPosition;
 
-        public OperationMove(ActorModelBase owner, CommandRunner commandRunner, Vector3 targetPosition) : base(owner, commandRunner)
+        public OperationMoveToTargetPoint(ActorModelBase owner, CommandRunner commandRunner, Vector3 targetPosition) : base(owner, commandRunner)
         {
             this.targetPosition = targetPosition;
         }
@@ -49,12 +49,6 @@ namespace Conductor.Game.Model
                 var walkCommand = new CommandModelActorWalk(Owner, true);
                 CommandRunner.Schedule(walkCommand);
             }
-        }
-
-        public override bool HasFinished()
-        {
-            Vector3 toTarget = targetPosition - Owner.ViewBase.transform.localPosition;
-            return toTarget.sqrMagnitude < Epsilon * Epsilon;
         }
     }
 }
