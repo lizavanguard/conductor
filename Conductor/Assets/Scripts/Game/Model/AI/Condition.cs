@@ -75,7 +75,7 @@ namespace Conductor.Game.Model
             Vector3 ownerDirection = owner.HorizontalDirection;
 
             bool directionEqual = false;
-            foreach (var enemy in gameMaster.MockEnemies)
+            foreach (var enemy in gameMaster.Enemies)
             {
                 Vector3 toEnemy = enemy.Position - owner.Position;
                 toEnemy.y = 0.0f;
@@ -101,7 +101,7 @@ namespace Conductor.Game.Model
         void UpdateCanTargetSomeEnemyCondition(ActorModelBase owner, GameMaster gameMaster)
         {
             bool near = false;
-            foreach (var enemy in gameMaster.MockEnemies)
+            foreach (var enemy in gameMaster.Enemies)
             {
                 Vector3 toEnemy = enemy.Position - owner.Position;
                 toEnemy.y = 0.0f;

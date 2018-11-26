@@ -17,6 +17,8 @@ namespace Conductor.Game
         SoldierAI[] friendAIs;
         SoldierAI[] enemyAIs;
 
+        public ActorModelBase[] Enemies { get { return enemies; } }
+
         public ActorUpdater(View.ActorPrefabReference prefabReference, CommandRunner commandRunner, GameMaster gameMaster)
         {
             ActorFactory factory = new ActorFactory(prefabReference);
@@ -44,6 +46,17 @@ namespace Conductor.Game
                 friends[i] = friend;
 
                 friendAIs[i] = new SoldierAI(friend, commandRunner, gameMaster);
+            }
+
+            // AI初期化はActorModelを全て生成し終えてから
+            foreach (var ai in friendAIs)
+            {
+                ai.Initialize();
+            }
+
+            foreach (var ai in enemyAIs)
+            {
+                ai.Initialize();
             }
         }
 

@@ -18,7 +18,7 @@ namespace Conductor.Game.Model
         {
             // FIXME: 一番よさそうな方向をナビゲーションが示すように修正
             ActorModelBase target = null;
-            var enemies = gameMaster.MockEnemies;
+            var enemies = gameMaster.Enemies;
             float minSq = float.MaxValue;
             foreach (var enemy in enemies)
             {
