@@ -5,13 +5,74 @@ using UnityEngine;
 
 namespace Conductor.Game
 {
+    /// <summary>
+    /// Updateをぐるぐる回すだけのひと
+    /// TODO: あまりに仕事がないからaccessorも兼ねているが、肥大化するならインスタンス管理と処理の発火を別クラスに分けてもいい
+    /// 仕事が増えたらクラス名変えるかも
+    /// </summary>
     public class ActorUpdater
     {
-        List<ActorModelBase> friends;
-        List<ActorModelBase> enemies;
-        public ActorUpdater(View.ActorPrefabReference prefabReference)
+        ActorModelBase[] friends;
+        ActorModelBase[] enemies;
+        SoldierAI[] friendAIs;
+        SoldierAI[] enemyAIs;
+
+        public ActorUpdater(View.ActorPrefabReference prefabReference, CommandRunner commandRunner, GameMaster gameMaster)
         {
             ActorFactory factory = new ActorFactory(prefabReference);
+
+            // FIXME: 数は適当なので外部から読み込むときにYOSHINANI
+            enemies = new ActorModelBase[4];
+            enemyAIs = new SoldierAI[4];
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                var enemy = factory.CreateSoldier();
+                enemy.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, 4.0f);
+                enemies[i] = enemy;
+
+                enemyAIs[i] = new SoldierAI(enemy, commandRunner, gameMaster);
+            }
+
+            friends = new ActorModelBase[1];
+            friendAIs = new SoldierAI[1];
+            for (int i = 0; i < friends.Length; i++)
+            {
+                var friend = factory.CreateSoldier();
+
+                // AI動作確認のため敵から遠くに
+                friend.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, -20.0f);
+                friends[i] = friend;
+
+                friendAIs[i] = new SoldierAI(friend, commandRunner, gameMaster);
+            }
+        }
+
+        public void Update()
+        {
+            // AI構築中はこうする そのうちデバッグメニューに移すとかinspectorに逃がすとかしたい
+            if (Input.GetKey(KeyCode.Space))
+            {
+                foreach (var ai in friendAIs)
+                {
+                    ai.Update();
+                }
+            }
+
+            foreach (var friend in friends)
+            {
+                friend.Update();
+            }
+
+            foreach (var ai in enemyAIs)
+            {
+                // 敵 == enemyMockとして味方用AIとしての実装しかしていないので、敵対陣営の概念を実装するまで更新切る
+                // ai.Update();
+            }
+
+            foreach (var enemy in enemies)
+            {
+                enemy.Update();
+            }
         }
     }
 }
