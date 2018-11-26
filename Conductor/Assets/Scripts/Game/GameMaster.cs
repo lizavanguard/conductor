@@ -12,7 +12,8 @@ namespace Conductor.Game
         View.ActorPrefabReference actorPrefabReference;
 
         ActorUpdater actorUpdater;
-        public Model.ActorModelBase[] Enemies { get { return actorUpdater.Enemies; } }
+        // それぞれの陣営を定義し、「敵陣営取得メソッド」を新たに定義 作業メモとしてわかりやすいようにコメントアウトしてコンパイルエラーに
+        // public Model.ActorModelBase[] Enemies { get { return actorUpdater.Enemies; } }
 
 
         [SerializeField]
