@@ -18,6 +18,7 @@ namespace Conductor.Game
         SoldierAI[] enemyAIs;
 
         public ActorModelBase[] Enemies { get { return enemies; } }
+        public ActorModelBase[] Friends { get { return friends; } }
 
         public ActorUpdater(View.ActorPrefabReference prefabReference, CommandRunner commandRunner, GameMaster gameMaster)
         {
