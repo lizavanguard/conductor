@@ -28,7 +28,7 @@ namespace Conductor.Game
             enemyAIs = new SoldierAI[4];
             for (int i = 0; i < enemies.Length; i++)
             {
-                var enemy = factory.CreateSoldier();
+                var enemy = factory.CreateSoldier(ActorModelBase.ArmySide.Enemy);
                 enemy.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, 4.0f);
                 enemies[i] = enemy;
 
@@ -39,7 +39,7 @@ namespace Conductor.Game
             friendAIs = new SoldierAI[1];
             for (int i = 0; i < friends.Length; i++)
             {
-                var friend = factory.CreateSoldier();
+                var friend = factory.CreateSoldier(ActorModelBase.ArmySide.Friend);
 
                 // AI動作確認のため敵から遠くに
                 friend.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, -20.0f);

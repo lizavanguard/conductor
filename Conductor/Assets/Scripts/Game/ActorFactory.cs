@@ -15,10 +15,10 @@ namespace Conductor.Game
             this.prefabReference = prefabReference;
         }
 
-        public ActorModelSoldier CreateSoldier()
+        public ActorModelSoldier CreateSoldier(ActorModelBase.ArmySide armySide)
         {
             var view = GameObject.Instantiate<ActorViewSoldier>(prefabReference.Soldier);
-            var model = new ActorModelSoldier(view);
+            var model = new ActorModelSoldier(view, armySide);
 
             return model;
         }

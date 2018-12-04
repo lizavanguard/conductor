@@ -16,8 +16,8 @@ namespace Conductor.Game.Model
 
         float directionAngleDegree;
 
-        public ActorModelSoldier(ActorViewSoldier viewSoldier)
-            : base(viewSoldier)
+        public ActorModelSoldier(ActorViewSoldier viewSoldier, ArmySide side)
+            : base(viewSoldier, side)
         {
         }
 
