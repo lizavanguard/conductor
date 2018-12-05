@@ -16,6 +16,12 @@ namespace Conductor.Game.Model
             Attack
         }
 
+        public enum ArmyGroupSide
+        {
+            Friend,
+            Enemy
+        }
+
         ActorModelStateBase currentState;
         public ActorModelStateBase CurrentState { get { return currentState; } }
         StateType currentStateType;
@@ -26,6 +32,9 @@ namespace Conductor.Game.Model
         public int Id { get { return id; } }
 
         ActorViewBase viewBase;
+
+        ArmyGroupSide groupSide;
+        public ArmyGroupSide GroupSide { get { return groupSide; } }
 
         public ActorViewBase ViewBase { get { return viewBase; } }
 
@@ -39,9 +48,10 @@ namespace Conductor.Game.Model
             get { return horizontalDirection; }
         }
 
-        public ActorModelBase(ActorViewBase viewBase)
+        public ActorModelBase(ActorViewBase viewBase, ArmyGroupSide armySide)
         {
             this.viewBase = viewBase;
+            this.groupSide = armySide;
 
             // FIXME: 初期化用のinfo構造体から初期化する
             horizontalDirection = Vector3.forward;

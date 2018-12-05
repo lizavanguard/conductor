@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Conductor.Game.Model;
 using UnityEngine;
 
 namespace Conductor.Game
@@ -11,20 +12,22 @@ namespace Conductor.Game
         [SerializeField]
         View.ActorPrefabReference actorPrefabReference;
 
-        ActorFactory actorFactory;
-
-        Model.ActorModelSoldier mockSoldier;
-
-        Model.ActorModelBase[] mockEnemies;
-        public Model.ActorModelBase[] MockEnemies { get { return mockEnemies; } }
-
-        Model.SoldierAI[] mockEnemyAIs;
-        Model.SoldierAI mockSoldierAI;
+        ActorUpdater actorUpdater;
 
         [SerializeField]
         Vector3 targetPosition;
 
-        Model.OperationBase operation;
+        OperationBase operation;
+
+        public Model.ActorModelBase[] GetOppositeGroup(ActorModelBase.ArmyGroupSide selfSide)
+        {
+            if (selfSide == ActorModelBase.ArmyGroupSide.Friend)
+            {
+                return actorUpdater.Enemies;
+            }
+
+            return actorUpdater.Friends;
+        }
 
         /// <summary>
         /// 各Modelの生成と初期化
@@ -35,31 +38,8 @@ namespace Conductor.Game
 
             // FIXME: マップ作成
 
-            // キャラクター作成 FIXME: 一旦モックとしてこう作るが管理クラスを設けたい
-            actorFactory = new ActorFactory(actorPrefabReference);
-            mockSoldier = actorFactory.CreateSoldier();
-
-            // AI動作確認のため敵から遠くに
-            mockSoldier.ViewBase.transform.localPosition = new Vector3(0.0f, 0.0f, -20.0f);
-
-            mockEnemies = new Model.ActorModelBase[4];
-            mockEnemyAIs = new Model.SoldierAI[4];
-            for (int i = 0; i < mockEnemies.Length; i++)
-            {
-                var enemy = actorFactory.CreateSoldier();
-                enemy.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, 4.0f);
-                mockEnemies[i] = enemy;
-
-                mockEnemyAIs[i] = new Model.SoldierAI(enemy, commandRunner, this);
-            }
-
-            foreach (var ai in mockEnemyAIs)
-            {
-                ai.Initialize();
-            }
-
-            mockSoldierAI = new Model.SoldierAI(mockSoldier, commandRunner, this);
-            mockSoldierAI.Initialize();
+            // キャラクター作成
+            actorUpdater = new ActorUpdater(actorPrefabReference, commandRunner, this);
         }
 
         /// <summary>
@@ -67,50 +47,7 @@ namespace Conductor.Game
         /// </summary>
         private void Update()
         {
-            if (Input.GetKey(KeyCode.UpArrow))
-            {
-                var command = new Model.CommandModelActorWalk(mockSoldier, true);
-                commandRunner.Schedule(command);
-            }
-
-            if (Input.GetKey(KeyCode.DownArrow))
-            {
-                var command = new Model.CommandModelActorWalk(mockSoldier, false);
-                commandRunner.Schedule(command);
-            }
-
-            if (Input.GetKey(KeyCode.RightArrow))
-            {
-                var command = new Model.CommandModelActorRotate(mockSoldier, true);
-                commandRunner.Schedule(command);
-            }
-
-            if (Input.GetKey(KeyCode.LeftArrow))
-            {
-                var command = new Model.CommandModelActorRotate(mockSoldier, false);
-                commandRunner.Schedule(command);
-            }
-
-            foreach (var ai in mockEnemyAIs)
-            {
-                // 敵 == enemyMockとして味方用AIとしての実装しかしていないので、敵対陣営の概念を実装するまで更新切る
-                // ai.Update();
-            }
-
-            if (mockSoldier != null)
-            {
-                mockSoldier.Update();
-            }
-
-            foreach (var enemy in mockEnemies)
-            {
-                enemy.Update();
-            }
-
-            if (Input.GetKey(KeyCode.Space))
-            {
-                mockSoldierAI.Update();
-            }
+            actorUpdater.Update();
 
             // FIXME: after updating each component
             commandRunner.Update();
