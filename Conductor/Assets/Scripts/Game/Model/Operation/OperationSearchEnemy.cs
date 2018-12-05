@@ -25,7 +25,7 @@ namespace Conductor.Game.Model
         {
             // FIXME: 一番よさそうな方向をナビゲーションが示すように修正
 
-            var enemies = gameMaster.Enemies;
+            var enemies = gameMaster.GetOppositeGroup(Owner.GroupSide);
             float minSq = float.MaxValue;
             foreach (var enemy in enemies)
             {

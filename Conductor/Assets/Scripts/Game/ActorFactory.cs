@@ -15,7 +15,7 @@ namespace Conductor.Game
             this.prefabReference = prefabReference;
         }
 
-        public ActorModelSoldier CreateSoldier(ActorModelBase.ArmySide armySide)
+        public ActorModelSoldier CreateSoldier(ActorModelBase.ArmyGroupSide armySide)
         {
             var view = GameObject.Instantiate<ActorViewSoldier>(prefabReference.Soldier);
             var model = new ActorModelSoldier(view, armySide);

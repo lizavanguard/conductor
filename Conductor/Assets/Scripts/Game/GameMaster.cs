@@ -13,18 +13,15 @@ namespace Conductor.Game
         View.ActorPrefabReference actorPrefabReference;
 
         ActorUpdater actorUpdater;
-        // それぞれの陣営を定義し、「敵陣営取得メソッド」を新たに定義
-        public ActorModelBase[] Enemies { get { return actorUpdater.Enemies; } }
-
 
         [SerializeField]
         Vector3 targetPosition;
 
         OperationBase operation;
 
-        public Model.ActorModelBase[] GetOppositeGroup(ActorModelBase.ArmySide selfSide)
+        public Model.ActorModelBase[] GetOppositeGroup(ActorModelBase.ArmyGroupSide selfSide)
         {
-            if (selfSide == ActorModelBase.ArmySide.Friend)
+            if (selfSide == ActorModelBase.ArmyGroupSide.Friend)
             {
                 return actorUpdater.Enemies;
             }

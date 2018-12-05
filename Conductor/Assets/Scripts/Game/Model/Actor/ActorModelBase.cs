@@ -16,7 +16,7 @@ namespace Conductor.Game.Model
             Attack
         }
 
-        public enum ArmySide
+        public enum ArmyGroupSide
         {
             Friend,
             Enemy
@@ -33,8 +33,8 @@ namespace Conductor.Game.Model
 
         ActorViewBase viewBase;
 
-        ArmySide side;
-        public ArmySide Side { get { return side; } }
+        ArmyGroupSide groupSide;
+        public ArmyGroupSide GroupSide { get { return groupSide; } }
 
         public ActorViewBase ViewBase { get { return viewBase; } }
 
@@ -48,10 +48,10 @@ namespace Conductor.Game.Model
             get { return horizontalDirection; }
         }
 
-        public ActorModelBase(ActorViewBase viewBase, ArmySide armySide)
+        public ActorModelBase(ActorViewBase viewBase, ArmyGroupSide armySide)
         {
             this.viewBase = viewBase;
-            this.side = armySide;
+            this.groupSide = armySide;
 
             // FIXME: 初期化用のinfo構造体から初期化する
             horizontalDirection = Vector3.forward;
