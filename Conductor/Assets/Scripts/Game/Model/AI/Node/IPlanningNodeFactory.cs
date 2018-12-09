@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Conductor.Game.Model
 {
-    interface IPlanningNodeFactory
+    public interface IPlanningNodeFactory
     {
         PlanningNode[] Create();
     }
