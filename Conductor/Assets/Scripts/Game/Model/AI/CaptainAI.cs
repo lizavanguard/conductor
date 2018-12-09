@@ -11,7 +11,7 @@ namespace Conductor.Game.Model
     {
         // planningを持たせる ok
         // Nose生成メソッドを拡張してcaptain用を作る ok
-        // Operationも拡張
+        // Operationも拡張 ok
         // 実際のOperationを書く
         // 必要ならConditionも拡張
         // Nodeを実際に生成
