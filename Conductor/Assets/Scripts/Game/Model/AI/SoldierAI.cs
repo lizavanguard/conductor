@@ -18,7 +18,8 @@ namespace Conductor.Game.Model
         public SoldierAI(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
         {
             this.owner = owner;
-            planning = new SoldierPlanning(owner, commandRunner, gameMaster);
+            var nodeFactory = new PlanningNodeFactorySoldiler(owner, commandRunner, gameMaster);
+            planning = new SoldierPlanning(owner, commandRunner, gameMaster, nodeFactory);
 
             // FIXME: 本当は部隊長クラスからゴールを教えてもらうはず
             planning.SetGoal(new Condition(new ConditionType[] { ConditionType.HittingSomeEnemy }));

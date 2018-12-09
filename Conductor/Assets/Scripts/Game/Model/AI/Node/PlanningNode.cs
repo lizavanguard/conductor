@@ -6,7 +6,7 @@ namespace Conductor.Game.Model
 {
     // FIXME: なんとかこれをデータ化したい
     // planningChainを作るときはafterとbeforeで変化のあったbitに着目して次の状況を作る
-    class PlannngNode
+    public class PlanningNode
     {
         // 前提条件
         Condition beforeCondition;
@@ -22,7 +22,7 @@ namespace Conductor.Game.Model
         public OperationType OperationType { get { return operationType; } }
 
 
-        public PlannngNode(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, Condition before, Condition after, OperationType operationType)
+        public PlanningNode(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, Condition before, Condition after, OperationType operationType)
         {
             this.beforeCondition = before;
             this.afterCondition = after;

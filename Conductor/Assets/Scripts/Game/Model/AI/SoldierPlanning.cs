@@ -10,13 +10,13 @@ namespace Conductor.Game.Model
     public class SoldierPlanning
     {
         // 候補のNode
-        PlannngNode[] baseNodeList;
+        PlanningNode[] baseNodeList;
 
         // プランニングの最終目標
         Condition goalCondition;
 
         // 現在構築済のプランニング
-        List<PlannngNode> currentPlanningChain;
+        List<PlanningNode> currentPlanningChain;
 
         Condition currentCondition;
 
@@ -28,13 +28,12 @@ namespace Conductor.Game.Model
 
         public OperationBase CurrentOperation { get { return currentOperation; } }
 
-        public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
+        public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, IPlanningNodeFactory nodeFactory)
         {
-            // FIXME: Factoryから貰う形にしたほうがよさそう
-            baseNodeList = GenerateOperationNodes(owner, commandRunner, gameMaster);
+            baseNodeList = nodeFactory.Create();
 
             currentCondition = new Condition(new ConditionType[] { });
-            currentPlanningChain = new List<PlannngNode>();
+            currentPlanningChain = new List<PlanningNode>();
 
             this.owner = owner;
             this.commandRunner = commandRunner;
@@ -110,7 +109,7 @@ namespace Conductor.Game.Model
             return currentPlanningChain != null && currentPlanningChain.Count > 0;
         }
 
-        List<PlannngNode> ChainNode(List<PlannngNode> chain, Condition goal)
+        List<PlanningNode> ChainNode(List<PlanningNode> chain, Condition goal)
         {
             // currentStateがゴールを満たしているかどうかチェック(終了判定)
             if (currentCondition.Satisfy(goal))
@@ -119,7 +118,7 @@ namespace Conductor.Game.Model
             }
 
             // 現在ゴールを満たすafterConditionを持ったNodeを一覧化
-            var newNodeList = new List<PlannngNode>();
+            var newNodeList = new List<PlanningNode>();
             foreach (var node in baseNodeList)
             {
                 if (node.AfterCondition.Satisfy(goal))
@@ -143,7 +142,7 @@ namespace Conductor.Game.Model
                 }
 
                 // よしなに(最初は順番に)選ぶ 現在の状態に最も近付くようなやつがいい
-                var tempChain = new List<PlannngNode>(chain);
+                var tempChain = new List<PlanningNode>(chain);
                 tempChain.Add(newNode);
 
                 // 現在ゴールを更新
@@ -161,56 +160,6 @@ namespace Conductor.Game.Model
 
             // どれも行き詰まりか千日手
             return null;
-        }
-
-        // FIXME: 本当は外部ファイルから読み込むべき
-        // 最終的には敵タイプとか味方ユニットごとに外部データから読み込み
-        // 味方の方はユーザーがいじれるようにもしたい
-        PlannngNode[] GenerateOperationNodes(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
-        {
-            List<PlannngNode> newNodeList = new List<PlannngNode>();
-
-            // 最も近くにいる敵対陣営のキャラのほうを向く
-            {
-                var beforeList = new ConditionType[]
-                {
-                };
-                var afterList = new ConditionType[]
-                {
-                    ConditionType.LookToSomeEnemy,
-                };
-                var node = new PlannngNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.LookToNearestEnemy);
-                newNodeList.Add(node);
-            }
-
-            // 最も近くにいる敵対陣営のキャラを攻撃しようとする
-            {
-                var beforeList = new ConditionType[]
-                {
-                    ConditionType.CanTargetSomeEnemy,
-                };
-                var afterList = new ConditionType[]
-                {
-                    ConditionType.HittingSomeEnemy,
-                };
-                var node = new PlannngNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.AttackNearestEnemy);
-                newNodeList.Add(node);
-            }
-
-            // 攻撃相手が見つかるまで索敵
-            {
-                var beforeList = new ConditionType[]
-                {
-                };
-                var afterList = new ConditionType[]
-                {
-                    ConditionType.CanTargetSomeEnemy,
-                };
-                var node = new PlannngNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.SearchEnemy);
-                newNodeList.Add(node);
-            }
-
-            return newNodeList.ToArray();
         }
     }
 }
