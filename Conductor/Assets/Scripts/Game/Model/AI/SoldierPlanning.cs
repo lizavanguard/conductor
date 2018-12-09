@@ -56,6 +56,7 @@ namespace Conductor.Game.Model
 
         public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
         {
+            // FIXME: Factoryから貰う形にしたほうがよさそう
             baseNodeList = GenerateOperationNodes(owner, commandRunner, gameMaster);
 
             currentCondition = new Condition(new ConditionType[] { });
