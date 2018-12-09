@@ -10,7 +10,7 @@ namespace Conductor.Game.Model
     public class CaptainAI
     {
         // planningを持たせる ok
-        // Nose生成メソッドを拡張してcaptain用を作る
+        // Nose生成メソッドを拡張してcaptain用を作る ok
         // Operationも拡張
         // 実際のOperationを書く
         // 必要ならConditionも拡張
