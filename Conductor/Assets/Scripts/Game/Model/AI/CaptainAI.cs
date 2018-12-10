@@ -13,6 +13,11 @@ namespace Conductor.Game.Model
         // Nose生成メソッドを拡張してcaptain用を作る ok
         // Operationも拡張 ok
         // 実際のOperationを書く
+            // gameMasterに各種AI取得メソッドを書く
+            // Nodeに立つフラグリストとは別に折れるフラグリストも作る(必ずしも折れなくても、多分折れるというものは入れておく)
+            // SoldierAIにTargetPositionを設定
+            // 「TargetPositionの近くにいる」のCondition作成
+            // OperationはすでにあるのでNodeに適用
         // 必要ならConditionも拡張
         // Nodeを実際に生成
         // 設計上問題がなければsoldierってついてるクラスをリネーム(のちに分けるとしたら継承でpolymorphicに)
@@ -31,6 +36,11 @@ namespace Conductor.Game.Model
         ActorModelBase[] subSoldiers;
 
         SoldierPlanning planning;
+
+        public ActorModelBase[] SubSoldiers
+        {
+            get { return subSoldiers; }
+        }
 
         public CaptainAI(ActorModelBase owner, ActorModelBase[] subSoldiers, CommandRunner commandRunner, GameMaster gameMaster)
         {

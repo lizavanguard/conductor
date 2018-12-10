@@ -4,6 +4,9 @@ using UnityEngine;
 
 namespace Conductor.Game.Model
 {
+    /// <summary>
+    /// 円陣を組む作戦行動
+    /// </summary>
     public class OperationCaptainCircle : OperationBase
     {
         GameMaster gameMaster;
@@ -22,6 +25,31 @@ namespace Conductor.Game.Model
             // 円陣程度なら後者でよさそう？
 
             // 兵の数から配置を算出
+            CaptainAI captain = null;// FIXME: 一旦gameMasterから取得
+            var soldiers = captain.SubSoldiers;
+
+            // ひとまず雑にひとつの円として実装
+            // どのくらいの人数から二重にするかは悩みどころ
+            float radius = 5.0f;
+            var rotation = Quaternion.AngleAxis(360.0f / (float)soldiers.Length, Vector3.up);
+            Vector3 direction = Owner.HorizontalDirection;
+            for (int i = 0; i < soldiers.Length; i++)
+            {
+                var soldier = soldiers[i];
+                var position = Owner.Position + direction * radius;
+                SoldierAI soldierAI = null;
+
+                // 「targetPositionの近くにいる」を追加する
+                soldierAI.Planning.SetGoal(new Condition(new ConditionType[] { ConditionType.LookToSomeEnemy }));
+
+                direction = rotation * direction;
+            }
+
+            // 各兵へのリアルタイムな指示はどうすべきだろう
+            // 円陣の一部として処理されるよう上手く設計する
+            // 決してtrueにならないようなCondition(円陣を維持する)を設定し、それをゴールとしたNodeを組む これは別operationとして実装
+            // 他にも円陣のまま動くとかが考えられる
+            // 中々上手くいかないことでRebuildが走り、その都度適切な陣形を取ることも考えられる
         }
 
     }

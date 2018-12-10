@@ -13,6 +13,7 @@ namespace Conductor.Game.Model
         // planning
         SoldierPlanning planning;
 
+        public SoldierPlanning Planning { get { return planning; } }
         public OperationBase GetCurrentOperation { get { return planning.CurrentOperation; } }
 
         public SoldierAI(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
