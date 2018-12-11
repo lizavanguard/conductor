@@ -25,7 +25,7 @@ namespace Conductor.Game.Model
             // 円陣程度なら後者でよさそう？
 
             // 兵の数から配置を算出
-            CaptainAI captain = null;// FIXME: 一旦gameMasterから取得
+            CaptainAI captain = gameMaster.ActorUpdater.GetCaptainAI(Owner.Id);
             var soldiers = captain.SubSoldiers;
 
             // ひとまず雑にひとつの円として実装
@@ -37,7 +37,7 @@ namespace Conductor.Game.Model
             {
                 var soldier = soldiers[i];
                 var position = Owner.Position + direction * radius;
-                SoldierAI soldierAI = null;
+                SoldierAI soldierAI = gameMaster.ActorUpdater.GetSoldierAI(soldier.Id);
 
                 // 「targetPositionの近くにいる」を追加する
                 soldierAI.Planning.SetGoal(new Condition(new ConditionType[] { ConditionType.LookToSomeEnemy }));

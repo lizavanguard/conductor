@@ -17,6 +17,8 @@ namespace Conductor.Game
         SoldierAI[] friendAIs;
         SoldierAI[] enemyAIs;
 
+        Dictionary<int, SoldierAI> soldierAIMap;
+
         public ActorModelBase[] Enemies { get { return enemies; } }
         public ActorModelBase[] Friends { get { return friends; } }
 
@@ -59,6 +61,18 @@ namespace Conductor.Game
             {
                 ai.Initialize();
             }
+
+            // 参照用map構築
+            soldierAIMap = new Dictionary<int, SoldierAI>();
+            for (int i = 0; i < friends.Length; i++)
+            {
+                soldierAIMap.Add(friends[i].Id, friendAIs[i]);
+            }
+
+            for (int i = 0; i < enemies.Length; i++)
+            {
+                soldierAIMap.Add(enemies[i].Id, enemyAIs[i]);
+            }
         }
 
         public void Update()
@@ -87,6 +101,32 @@ namespace Conductor.Game
             {
                 enemy.Update();
             }
+        }
+
+        public ActorModelBase[] GetOppositeGroup(ActorModelBase.ArmyGroupSide selfSide)
+        {
+            if (selfSide == ActorModelBase.ArmyGroupSide.Friend)
+            {
+                return Enemies;
+            }
+
+            return Friends;
+        }
+
+        public SoldierAI GetSoldierAI(int soldierId)
+        {
+            if (soldierAIMap.ContainsKey(soldierId))
+            {
+                return soldierAIMap[soldierId];
+            }
+
+            return null;
+        }
+
+        // FIXME: implement me, ha ha ha!!
+        public CaptainAI GetCaptainAI(int soldierId)
+        {
+            return null;
         }
     }
 }

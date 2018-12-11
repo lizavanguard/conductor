@@ -75,7 +75,7 @@ namespace Conductor.Game.Model
             Vector3 ownerDirection = owner.HorizontalDirection;
 
             bool directionEqual = false;
-            var enemies = gameMaster.GetOppositeGroup(owner.GroupSide);
+            var enemies = gameMaster.ActorUpdater.GetOppositeGroup(owner.GroupSide);
             foreach (var enemy in enemies)
             {
                 Vector3 toEnemy = enemy.Position - owner.Position;
@@ -102,7 +102,7 @@ namespace Conductor.Game.Model
         void UpdateCanTargetSomeEnemyCondition(ActorModelBase owner, GameMaster gameMaster)
         {
             bool near = false;
-            var enemies = gameMaster.GetOppositeGroup(owner.GroupSide);
+            var enemies = gameMaster.ActorUpdater.GetOppositeGroup(owner.GroupSide);
             foreach (var enemy in enemies)
             {
                 Vector3 toEnemy = enemy.Position - owner.Position;

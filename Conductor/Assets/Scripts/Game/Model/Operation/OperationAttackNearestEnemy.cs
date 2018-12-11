@@ -18,7 +18,7 @@ namespace Conductor.Game.Model
         {
             // FIXME: 一番よさそうな方向をナビゲーションが示すように修正
             ActorModelBase target = null;
-            var enemies = gameMaster.GetOppositeGroup(Owner.GroupSide);
+            var enemies = gameMaster.ActorUpdater.GetOppositeGroup(Owner.GroupSide);
             float minSq = float.MaxValue;
             foreach (var enemy in enemies)
             {

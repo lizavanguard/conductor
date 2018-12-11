@@ -13,7 +13,7 @@ namespace Conductor.Game.Model
         // Nose生成メソッドを拡張してcaptain用を作る ok
         // Operationも拡張 ok
         // 実際のOperationを書く
-            // gameMasterに各種AI取得メソッドを書く
+            // gameMasterに各種AI取得メソッドを書く kokokara
             // Nodeに立つフラグリストとは別に折れるフラグリストも作る(必ずしも折れなくても、多分折れるというものは入れておく)
             // SoldierAIにTargetPositionを設定
             // 「TargetPositionの近くにいる」のCondition作成
