@@ -8,21 +8,19 @@ namespace Conductor.Game.Model
     {
         // 比較用イプシロン ちょっと広めに
         static readonly float Epsilon = 0.1f;
-        Vector3 targetPosition;
 
-        public OperationMoveToTargetPoint(ActorModelBase owner, CommandRunner commandRunner, Vector3 targetPosition) : base(owner, commandRunner)
+        public OperationMoveToTargetPoint(ActorModelBase owner, CommandRunner commandRunner) : base(owner, commandRunner)
         {
-            this.targetPosition = targetPosition;
         }
 
         public override void Run()
         {
             // FIXME: 目的地に一直線だが本当なら逐次ナビゲーションが行き先を示す 局所的な情報なのでPQS
-            Vector3 tempTargetPosition = targetPosition;
+            Vector3 targetPosition = Owner.TargetPosition;
             Vector3 currentPosition = Owner.ViewBase.transform.localPosition;
 
             // 回転方向決定
-            Vector3 direction = tempTargetPosition - currentPosition;
+            Vector3 direction = targetPosition - currentPosition;
             direction.y = 0.0f;
             if (direction.sqrMagnitude < Epsilon * Epsilon)
             {

@@ -13,6 +13,7 @@ namespace Conductor.Game.Model
         // planning
         SoldierPlanning planning;
 
+
         public SoldierPlanning Planning { get { return planning; } }
         public OperationBase GetCurrentOperation { get { return planning.CurrentOperation; } }
 
@@ -48,6 +49,5 @@ namespace Conductor.Game.Model
                 planning.BuildPllaningChain();
             }
         }
-
     }
 }

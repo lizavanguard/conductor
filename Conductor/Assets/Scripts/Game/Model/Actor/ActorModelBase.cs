@@ -48,14 +48,21 @@ namespace Conductor.Game.Model
             get { return horizontalDirection; }
         }
 
+        // FIXME: 置き場所がこのクラスでいいかどうかはわからん AI側に置くほうが正しいかも
+        Vector3 targetPosition;
+        public Vector3 TargetPosition { get { return targetPosition; } }
+
         public ActorModelBase(ActorViewBase viewBase, ArmyGroupSide armySide)
         {
             this.viewBase = viewBase;
             this.groupSide = armySide;
 
+
             // FIXME: 初期化用のinfo構造体から初期化する
             horizontalDirection = Vector3.forward;
             viewBase.transform.localPosition = Vector3.zero;
+
+            this.targetPosition = Position;
 
             // 初期状態をViewに反映
             viewBase.UpdateRotationByDirection(horizontalDirection);
@@ -89,6 +96,11 @@ namespace Conductor.Game.Model
             }
 
             currentStateType = state;
+        }
+
+        public void SetTargetPosition(Vector3 position)
+        {
+            targetPosition = position;
         }
     }
 }

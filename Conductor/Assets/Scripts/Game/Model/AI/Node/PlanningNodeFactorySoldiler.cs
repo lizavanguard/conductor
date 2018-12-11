@@ -47,6 +47,9 @@ namespace Conductor.Game.Model
                 {
                     ConditionType.HittingSomeEnemy,
                 };
+                var disabledList = new ConditionType[]
+                {
+                };
                 var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.AttackNearestEnemy);
                 newNodeList.Add(node);
             }
@@ -59,6 +62,9 @@ namespace Conductor.Game.Model
                 var afterList = new ConditionType[]
                 {
                     ConditionType.CanTargetSomeEnemy,
+                };
+                var disabledList = new ConditionType[]
+                {
                 };
                 var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.SearchEnemy);
                 newNodeList.Add(node);

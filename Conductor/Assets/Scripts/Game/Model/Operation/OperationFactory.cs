@@ -45,8 +45,7 @@ namespace Conductor.Game.Model
             switch (type)
             {
                 case OperationType.MoveToTargetPoint:
-                    // FIXME: targetPointは命令を受けたownerが持っているはずなのでownerから受け取る
-                    return new OperationMoveToTargetPoint(owner, commandRunner, Vector3.zero);
+                    return new OperationMoveToTargetPoint(owner, commandRunner);
                 case OperationType.LookToNearestEnemy:
                     return new OperationLookToNearestEnemy(owner, commandRunner, gameMaster);
                 case OperationType.AttackNearestEnemy:
