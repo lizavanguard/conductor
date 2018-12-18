@@ -15,6 +15,9 @@ namespace Conductor.Game.Model
 
         // 敵に攻撃している
         HittingSomeEnemy,
+
+        // TargetPointの近くにいる
+        StayNearTargetPoint,
     }
 
     public class Condition
@@ -52,6 +55,7 @@ namespace Conductor.Game.Model
             UpdateLookToEnemyCondition(owner, gameMaster);
             UpdateCanTargetSomeEnemyCondition(owner, gameMaster);
             UpdateHittingSomeEnemyCondition(owner, gameMaster);
+            UpdateStayNearTargetPointCondition(owner, gameMaster);
         }
 
         void SetFlag(ConditionType type, bool flag)
@@ -124,6 +128,18 @@ namespace Conductor.Game.Model
             // 雑に攻撃状態かどうか見るだけ FIXME: 攻撃が敵に当たっているかどうかも見るべき？
             bool isHitting = owner.CurrentState as ActorModelStateSoldierAttack != null;
             SetFlag(ConditionType.HittingSomeEnemy, isHitting);
+        }
+
+        // TargetPointの近くにいる
+        void UpdateStayNearTargetPointCondition(ActorModelBase owner, GameMaster gameMaster)
+        {
+            Vector3 toTarget = owner.TargetPosition - owner.Position;
+
+            // 一応水平距離で比較
+            toTarget.y = 0.0f;
+
+            bool near = toTarget.sqrMagnitude < Constant.ActorPositionDistanceSqEpsilon;
+            SetFlag(ConditionType.StayNearTargetPoint, near);
         }
 
         #endregion

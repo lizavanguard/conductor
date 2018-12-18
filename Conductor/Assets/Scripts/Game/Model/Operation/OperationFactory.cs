@@ -53,7 +53,6 @@ namespace Conductor.Game.Model
                 case OperationType.SearchEnemy:
                     return new OperationSearchEnemy(owner, commandRunner, gameMaster);
                 case OperationType.CaptainCircle:
-                    // FIXME: ちゃんと定義する
                     return new OperationCaptainCircle(owner, commandRunner, gameMaster);
                 default:
                     break;
