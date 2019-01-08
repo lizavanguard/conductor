@@ -15,13 +15,21 @@ namespace Conductor.Game.Model
         // 実際のOperationを書く
             // gameMasterに各種AI取得メソッドを書く ok
             // SoldierAIにTargetPositionを設定 ok
-            // 「TargetPositionの近くにいる」のCondition作成 kokokara
-            // OperationはすでにあるのでNodeに適用
+            // 「TargetPositionの近くにいる」のCondition作成 ok
+            // OperationはすでにあるのでNodeを増築
         // 必要ならConditionも拡張
         // Nodeを実際に生成
         // 設計上問題がなければsoldierってついてるクラスをリネーム(のちに分けるとしたら継承でpolymorphicに)
         // 実際に部隊長を置いてみる
-        // 試しにtargetPositionガン守りと牽制の部隊を作ってみる
+        // 試しにtargetPositionガン守りと攻撃の部隊を作ってみる
+            // 守りは待ち作戦を作る必要あり
+            // 攻撃も「TargetActorを攻撃」とか「対象の部隊を攻撃」とかが必要かな
+            // ActorにTargetXXXを数種類定義する必要はありそう
+            // Nodeの生成部分、ぶっちゃけ普通に全パターン書くとだるすぎるので、外部データから自動生成したい
+                // あるOperationに関して、1. Conditionをfalse->trueと変化する、2. 無関係、3. 終わった後にtrueとは限らない(処理場は「必ずfalseになる」という扱いで進める)の三種類に分類
+                // 1はfalse->true、3はfalse->falseとした上で、2に関して全網羅
+                // 例えばConditionがA～Dの四種類で、あるOperationに関してAは1、BCは2、Dが3に分類される場合、四個のNodeができあがる
+                // 個数はかなり増えるが、Afterを使って検索する関係上、AfterのConditionを使って二分探索できるように並べ替えておけば検索は速くなるはず？
         // 味方側にも部隊を作ってみる
         // 操作周りができていたらサンプルステージを作ってみたい
         // 将軍作成に移行

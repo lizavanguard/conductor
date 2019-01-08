@@ -70,6 +70,22 @@ namespace Conductor.Game.Model
                 newNodeList.Add(node);
             }
 
+            // TargetPositionの近くに行く
+            {
+                var beforeList = new ConditionType[]
+                {
+                };
+                var afterList = new ConditionType[]
+                {
+                    ConditionType.StayNearTargetPoint,
+                };
+                var disabledList = new ConditionType[]
+                {
+                };
+                var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.MoveToTargetPoint);
+                newNodeList.Add(node);
+            }
+
             return newNodeList.ToArray();
         }
     }

@@ -22,7 +22,7 @@ namespace Conductor.Game.Model
             // 兵同士の連携を密にするなら、攻撃相手とかもここから指示すべき
             // 攻めるとか耐えるとか、大雑把な命令だけ与えて局所性は兵に任せるのもあり
             // 車とか魚鱗みたいに決まった動きが必要なら前者
-            // 円陣程度なら後者でよさそう？
+            // 基本的に後者に寄せて、targetPositionの調整などで連携を実現するほうがよさげ
 
             // 兵の数から配置を算出
             CaptainAI captain = gameMaster.ActorUpdater.GetCaptainAI(Owner.Id);
@@ -36,11 +36,11 @@ namespace Conductor.Game.Model
             for (int i = 0; i < soldiers.Length; i++)
             {
                 var soldier = soldiers[i];
-                var position = Owner.Position + direction * radius;
-                SoldierAI soldierAI = gameMaster.ActorUpdater.GetSoldierAI(soldier.Id);
+                var destination = Owner.Position + direction * radius;
+                soldier.SetTargetPosition(destination);
 
-                // 「targetPositionの近くにいる」を追加する
-                soldierAI.Planning.SetGoal(new Condition(new ConditionType[] { ConditionType.LookToSomeEnemy }));
+                SoldierAI soldierAI = gameMaster.ActorUpdater.GetSoldierAI(soldier.Id);
+                soldierAI.Planning.SetGoal(new Condition(new ConditionType[] { ConditionType.StayNearTargetPoint }));
 
                 direction = rotation * direction;
             }
