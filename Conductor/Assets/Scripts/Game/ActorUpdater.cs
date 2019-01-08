@@ -12,6 +12,7 @@ namespace Conductor.Game
     /// </summary>
     public class ActorUpdater
     {
+        // FIXME: このへんの参照はActorContainerクラスに逃がすのが美しいのでは？？？？
         ActorModelBase[] friends;
         ActorModelBase[] enemies;
         SoldierAI[] friendAIs;
