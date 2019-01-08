@@ -16,8 +16,8 @@ namespace Conductor.Game.Model
             // gameMasterに各種AI取得メソッドを書く ok
             // SoldierAIにTargetPositionを設定 ok
             // 「TargetPositionの近くにいる」のCondition作成 ok
-            // OperationはすでにあるのでNodeを増築
-        // 必要ならConditionも拡張
+            // OperationはすでにあるのでNodeを増築 ok
+        // 必要ならConditionも拡張 imakoko
         // Nodeを実際に生成
         // 設計上問題がなければsoldierってついてるクラスをリネーム(のちに分けるとしたら継承でpolymorphicに)
         // 実際に部隊長を置いてみる
