@@ -25,10 +25,11 @@ namespace Conductor.Game.Model
         ActorModelBase owner;
         CommandRunner commandRunner;
         GameMaster gameMaster;
+        IConditionUpdater conditionUpdater;
 
         public OperationBase CurrentOperation { get { return currentOperation; } }
 
-        public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, IPlanningNodeFactory nodeFactory)
+        public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, IPlanningNodeFactory nodeFactory, IConditionUpdater conditionUpdater)
         {
             baseNodeList = nodeFactory.Create();
 
@@ -38,6 +39,7 @@ namespace Conductor.Game.Model
             this.owner = owner;
             this.commandRunner = commandRunner;
             this.gameMaster = gameMaster;
+            this.conditionUpdater = conditionUpdater;
         }
 
         public void SetGoal(Condition goal)
@@ -47,7 +49,7 @@ namespace Conductor.Game.Model
 
         public void UpdateCurrentCondition()
         {
-            currentCondition.UpdateCondition(owner, gameMaster);
+            conditionUpdater.Update(currentCondition);
         }
 
         public void UpdatePlanning()

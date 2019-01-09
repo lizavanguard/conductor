@@ -21,7 +21,8 @@ namespace Conductor.Game.Model
         {
             this.owner = owner;
             var nodeFactory = new PlanningNodeFactorySoldiler(owner, commandRunner, gameMaster);
-            planning = new SoldierPlanning(owner, commandRunner, gameMaster, nodeFactory);
+            var conditionUpdater = new SoldierConditionUpdater(owner, gameMaster);
+            planning = new SoldierPlanning(owner, commandRunner, gameMaster, nodeFactory, conditionUpdater);
 
             // FIXME: 本当は部隊長クラスからゴールを教えてもらうはず
             planning.SetGoal(new Condition(new ConditionType[] { ConditionType.HittingSomeEnemy }));

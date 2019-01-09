@@ -55,7 +55,8 @@ namespace Conductor.Game.Model
             this.subSoldiers = subSoldiers;
 
             var nodeFactory = new PlanningNodeFactoryCaptain(owner, commandRunner, gameMaster);
-            planning = new SoldierPlanning(owner, commandRunner, gameMaster, nodeFactory);
+            var conditionUpdater = new SoldierConditionUpdater(owner, gameMaster);
+            planning = new SoldierPlanning(owner, commandRunner, gameMaster, nodeFactory, conditionUpdater);
 
             // FIXME: 本当は将軍とかプレイヤーから指示を貰う モックも部隊長用のconditionに差し替え
             planning.SetGoal(new Condition(new ConditionType[] { ConditionType.HittingSomeEnemy }));
