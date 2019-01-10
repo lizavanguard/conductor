@@ -54,6 +54,13 @@ namespace Conductor.Game.Model
             return other.Satisfy(this);
         }
 
+        // 特定のひとつを満たしているかどうか
+        public bool Satisfy(ConditionType type)
+        {
+            var mask = 1U << (int)type;
+            return (conditionFlag & mask) != 0;
+        }
+
         public void SetFlag(ConditionType type, bool flag)
         {
             var mask = 1U << (int)type;
