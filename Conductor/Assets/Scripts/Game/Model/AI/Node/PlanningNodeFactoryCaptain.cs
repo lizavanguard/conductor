@@ -34,7 +34,8 @@ namespace Conductor.Game.Model
             // って考えるとConditionからはUpdate機能を省いて、状態更新機能だけ公開したうえで、Updaterをplanning側に持たせてやるのが正着では？
             
             kokokara
-            // というわけでConditionの更新機能をUpdaterに逃がすところから開始
+            // というわけでConditionの更新機能をUpdaterに逃がすところから開始 ok
+            // Captain用のUpdaterを作成 ok
             // それができたら、円陣を組んでいるというConditionを作成して、Captain用のUpdaterから更新する
             // そこまでできたらCaptainを実際に生成できる気がする？
 

@@ -6,17 +6,24 @@ namespace Conductor.Game.Model
 {
     public enum ConditionType
     {
+        #region Soldier用
         // 誰でもいいから敵の方を向いている
         LookToSomeEnemy,
 
         // 移動して攻撃可能な敵を発見している
         CanTargetSomeEnemy,
 
-        // 敵に攻撃している
+        // 敵に攻撃している 達成不可能候補
         HittingSomeEnemy,
 
         // TargetPointの近くにいる
         StayNearTargetPoint,
+        #endregion
+
+        #region Captain用
+        // 円陣が完成している
+        CaptainCompleteCircleFormation,
+        #endregion
     }
 
     public class Condition
