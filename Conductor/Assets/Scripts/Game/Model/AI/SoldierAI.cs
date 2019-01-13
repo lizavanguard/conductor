@@ -6,14 +6,14 @@ namespace Conductor.Game.Model
 {
     public class SoldierAI
     {
-        public ActorModelBase owner;
+        ActorModelBase owner;
 
         // navigation
 
         // planning
         SoldierPlanning planning;
 
-
+        public ActorModelBase Owner { get { return owner; } }
         public SoldierPlanning Planning { get { return planning; } }
         public OperationBase GetCurrentOperation { get { return planning.CurrentOperation; } }
 

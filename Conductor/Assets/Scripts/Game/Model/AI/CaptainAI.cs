@@ -17,7 +17,7 @@ namespace Conductor.Game.Model
             // SoldierAIにTargetPositionを設定 ok
             // 「TargetPositionの近くにいる」のCondition作成 ok
             // OperationはすでにあるのでNodeを増築 ok
-        // 必要ならConditionも拡張 imakoko
+        // 必要ならConditionも拡張 ok
         // Nodeを実際に生成
         // 設計上問題がなければsoldierってついてるクラスをリネーム(のちに分けるとしたら継承でpolymorphicに)
         // 実際に部隊長を置いてみる
@@ -45,6 +45,8 @@ namespace Conductor.Game.Model
         ActorModelBase[] subSoldiers;
 
         SoldierPlanning planning;
+
+        public ActorModelBase Owner { get { return owner; } }
 
         public ActorModelBase[] SubSoldiers
         {
