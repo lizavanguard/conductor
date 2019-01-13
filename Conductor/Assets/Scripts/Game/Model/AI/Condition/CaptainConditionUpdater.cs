@@ -27,9 +27,16 @@ namespace Conductor.Game.Model
         void UpdateCompleteCircleFormationCondition(Condition target)
         {
             // FIXME: すべての部下に対してNearTargetPositionを尋ねればよろしい
-            kokokara
+            var soldiers = gameMaster.ActorUpdater.GetCaptainAI(owner.Id).SubSoldiers;
+            bool nearAll = true;
+            foreach (var soldier in soldiers)
+            {
+                var ai = gameMaster.ActorUpdater.GetSoldierAI(soldier.Id);
+                var condition = ai.Planning.CurrentCondition;
+                nearAll &= condition.Satisfy(ConditionType.StayNearTargetPoint);
+            }
 
-            target.SetFlag(ConditionType.CaptainCompleteCircleFormation, false);
+            target.SetFlag(ConditionType.CaptainCompleteCircleFormation, nearAll);
         }
         
         #endregion

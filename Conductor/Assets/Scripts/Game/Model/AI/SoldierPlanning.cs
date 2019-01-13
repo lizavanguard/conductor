@@ -27,6 +27,7 @@ namespace Conductor.Game.Model
         GameMaster gameMaster;
         IConditionUpdater conditionUpdater;
 
+        public Condition CurrentCondition { get { return currentCondition; } }
         public OperationBase CurrentOperation { get { return currentOperation; } }
 
         public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, IPlanningNodeFactory nodeFactory, IConditionUpdater conditionUpdater)
