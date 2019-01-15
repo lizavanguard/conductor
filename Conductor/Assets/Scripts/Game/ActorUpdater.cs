@@ -37,6 +37,7 @@ namespace Conductor.Game
             enemySoldierAIs = new SoldierAI[4];
             for (int i = 0; i < enemies.Length; i++)
             {
+                // FIXME: いまはsoldierしか作れないけどcaptainとかも作れるように
                 var enemy = factory.CreateSoldier(ActorModelBase.ArmyGroupSide.Enemy);
                 enemy.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, 4.0f);
                 enemies[i] = enemy;
@@ -105,7 +106,7 @@ namespace Conductor.Game
         public void Update()
         {
             // AI構築中はこうする そのうちデバッグメニューに移すとかinspectorに逃がすとかしたい
-            if (Input.GetKey(KeyCode.Space))
+            if (Input.GetKey(KeyCode.F))
             {
                 foreach (var ai in friendSoldierAIs)
                 {
@@ -118,10 +119,17 @@ namespace Conductor.Game
                 friend.Update();
             }
 
-            foreach (var ai in enemySoldierAIs)
+            if (Input.GetKey(KeyCode.E))
             {
-                // 敵 == enemyMockとして味方用AIとしての実装しかしていないので、敵対陣営の概念を実装するまで更新切る
-                // ai.Update();
+                foreach (var ai in enemyCaptainAIs)
+                {
+                    ai.Update();
+                }
+
+                foreach (var ai in enemySoldierAIs)
+                {
+                    ai.Update();
+                }
             }
 
             foreach (var enemy in enemies)

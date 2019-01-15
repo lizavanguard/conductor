@@ -18,7 +18,7 @@ namespace Conductor.Game.Model
             // 「TargetPositionの近くにいる」のCondition作成 ok
             // OperationはすでにあるのでNodeを増築 ok
         // 必要ならConditionも拡張 ok
-        // Nodeを実際に生成
+        // Nodeを実際に生成 ok
         // 設計上問題がなければsoldierってついてるクラスをリネーム(のちに分けるとしたら継承でpolymorphicに)
         // 実際に部隊長を置いてみる
         // 試しにtargetPositionガン守りと攻撃の部隊を作ってみる
@@ -62,8 +62,8 @@ namespace Conductor.Game.Model
             var conditionUpdater = new SoldierConditionUpdater(owner, gameMaster);
             planning = new SoldierPlanning(owner, commandRunner, gameMaster, nodeFactory, conditionUpdater);
 
-            // FIXME: 本当は将軍とかプレイヤーから指示を貰う モックも部隊長用のconditionに差し替え
-            planning.SetGoal(new Condition(new ConditionType[] { ConditionType.HittingSomeEnemy }));
+            // FIXME: 本当は将軍とかプレイヤーから指示を貰う
+            planning.SetGoal(new Condition(new ConditionType[] { ConditionType.CaptainCompleteCircleFormation }));
         }
 
         public void Update()

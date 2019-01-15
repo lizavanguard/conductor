@@ -27,6 +27,9 @@ namespace Conductor.Game.Model
         GameMaster gameMaster;
         IConditionUpdater conditionUpdater;
 
+        // rebuildフラグ
+        bool dirty;
+
         public Condition CurrentCondition { get { return currentCondition; } }
         public OperationBase CurrentOperation { get { return currentOperation; } }
 
@@ -45,6 +48,11 @@ namespace Conductor.Game.Model
 
         public void SetGoal(Condition goal)
         {
+            if (goalCondition != goal)
+            {
+                dirty = true;
+            }
+
             goalCondition = goal;
         }
 
@@ -55,6 +63,12 @@ namespace Conductor.Game.Model
 
         public void UpdatePlanning()
         {
+            // rebuildが必要ならrebuild TODO: ここでやるべきかどうかは要検討？
+            if (dirty)
+            {
+                BuildPllaningChain();
+            }
+
             if (currentPlanningChain == null || currentPlanningChain.Count == 0)
             {
                 currentOperation = null;
@@ -87,7 +101,12 @@ namespace Conductor.Game.Model
             // 最終ゴールを現在ゴールとして初期化
             currentOperation = null;
             currentPlanningChain.Clear();
-            currentPlanningChain = ChainNode(currentPlanningChain, goalCondition);
+
+            var newChain = ChainNode(currentPlanningChain, goalCondition);
+            if (newChain != null)
+            {
+                currentPlanningChain = newChain;
+            }
 
             foreach (var node in currentPlanningChain)
             {
@@ -100,6 +119,8 @@ namespace Conductor.Game.Model
                 var factory = new OperationFactory(owner, commandRunner, gameMaster);
                 currentOperation = factory.Create(node.OperationType);
             }
+
+            dirty = false;
         }
 
         public bool GoalIsSatisfied()

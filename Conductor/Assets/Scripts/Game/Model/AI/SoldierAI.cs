@@ -28,10 +28,8 @@ namespace Conductor.Game.Model
             planning.SetGoal(new Condition(new ConditionType[] { ConditionType.HittingSomeEnemy }));
         }
 
-        // 最初のChain構築
         public void Initialize()
         {
-            planning.BuildPllaningChain();
         }
 
         public void Update()

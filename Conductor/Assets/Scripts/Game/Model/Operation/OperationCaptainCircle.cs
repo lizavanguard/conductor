@@ -45,6 +45,11 @@ namespace Conductor.Game.Model
                 direction = rotation * direction;
             }
 
+            // 自分自身は今の場所に留まる 場合によっては動きながらも考えるけど、今は留まったままで
+            var selfAI = gameMaster.ActorUpdater.GetSoldierAI(Owner.Id);
+            selfAI.Planning.SetGoal(new Condition(new ConditionType[] { ConditionType.StayNearTargetPoint }));
+            Owner.SetTargetPosition(Owner.Position);
+
             // 各兵へのリアルタイムな指示はどうすべきだろう
             // 円陣の一部として処理されるよう上手く設計する
             // 決してtrueにならないようなCondition(円陣を維持する)を設定し、それをゴールとしたNodeを組む これは別operationとして実装
