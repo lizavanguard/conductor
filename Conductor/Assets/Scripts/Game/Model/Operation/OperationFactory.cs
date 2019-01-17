@@ -7,7 +7,8 @@ namespace Conductor.Game.Model
     // FIXME: OperationFactoryかOperationBaseに置く
     public enum OperationType
     {
-        // 特定地点へ移動する FIXME: この命令いけてない もうちょっと具体性が必要 「最も近くにいる敵に攻撃できる位置まで移動する」とか
+        #region Soldier用定義群
+        // 特定地点へ移動する 意外にこの命令使うわ……
         MoveToTargetPoint,
 
         // 最も近くにいる敵対陣営のキャラのほうを向く
@@ -18,6 +19,12 @@ namespace Conductor.Game.Model
 
         // ターゲット取れる敵が見つかるまで索敵
         SearchEnemy,
+        #endregion
+
+        #region Captain用定義群
+        // 円陣を組む
+        CaptainCircle,
+        #endregion
     }
 
     public class OperationFactory
@@ -38,14 +45,15 @@ namespace Conductor.Game.Model
             switch (type)
             {
                 case OperationType.MoveToTargetPoint:
-                    // FIXME: targetPointは命令を受けたownerが持っているはずなのでownerから受け取る
-                    return new OperationMoveToTargetPoint(owner, commandRunner, Vector3.zero);
+                    return new OperationMoveToTargetPoint(owner, commandRunner);
                 case OperationType.LookToNearestEnemy:
                     return new OperationLookToNearestEnemy(owner, commandRunner, gameMaster);
                 case OperationType.AttackNearestEnemy:
                     return new OperationAttackNearestEnemy(owner, commandRunner, gameMaster);
                 case OperationType.SearchEnemy:
                     return new OperationSearchEnemy(owner, commandRunner, gameMaster);
+                case OperationType.CaptainCircle:
+                    return new OperationCaptainCircle(owner, commandRunner, gameMaster);
                 default:
                     break;
             }

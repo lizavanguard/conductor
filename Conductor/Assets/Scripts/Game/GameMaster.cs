@@ -19,14 +19,9 @@ namespace Conductor.Game
 
         OperationBase operation;
 
-        public Model.ActorModelBase[] GetOppositeGroup(ActorModelBase.ArmyGroupSide selfSide)
+        public ActorUpdater ActorUpdater
         {
-            if (selfSide == ActorModelBase.ArmyGroupSide.Friend)
-            {
-                return actorUpdater.Enemies;
-            }
-
-            return actorUpdater.Friends;
+            get { return actorUpdater; }
         }
 
         /// <summary>
