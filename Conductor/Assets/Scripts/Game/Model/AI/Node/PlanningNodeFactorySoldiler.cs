@@ -17,9 +17,8 @@ namespace Conductor.Game.Model
             this.gameMaster = gameMaster;
         }
 
-        // FIXME: 本当は外部ファイルから読み込むべき
-        // 最終的には敵タイプとか味方ユニットごとに外部データから読み込み
-        // 味方の方はユーザーがいじれるようにもしたい
+        // FIXME: ConditionパターンのメタデータとOperationのリストから自動生成するように変更
+        // SoldierとCaptainの区別もいらなくなるはず
         public PlanningNode[] Create()
         {
             List<PlanningNode> newNodeList = new List<PlanningNode>();
