@@ -6,6 +6,6 @@ namespace Conductor.Game.Model
 {
     public interface IPlanningNodeFactory
     {
-        PlanningNode[] Create();
+        PlanningNode[] Create(OperationType[] operations);
     }
 }

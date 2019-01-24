@@ -20,7 +20,7 @@ namespace Conductor.Game.Model
         // FIXME: 本当は外部ファイルから読み込むべき
         // 最終的には敵タイプとか味方ユニットごとに外部データから読み込み
         // 味方の方はユーザーがいじれるようにもしたい
-        public PlanningNode[] Create()
+        public PlanningNode[] Create(OperationType[] operations)
         {
             List<PlanningNode> newNodeList = new List<PlanningNode>();
 

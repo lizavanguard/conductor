@@ -7,9 +7,9 @@ namespace Conductor.Game.Model
 {
     public class ConditionChangeData
     {
-        // メタデータクラスの作成
+        // メタデータクラスの作成 ok
+        // メタとOperationTypeからNodeを生成する部分 factoryを書き換える感じで
         // テキスト形式(tsvとか)からメタの読み込み
-        // メタとOperationTypeからNodeを生成する部分
         public enum ChangeType
         {
             // 対象のOperationで達成される

@@ -9,17 +9,21 @@ namespace Conductor.Game.Model
         ActorModelBase owner;
         CommandRunner commandRunner;
         GameMaster gameMaster;
+        Dictionary<OperationType, ConditionChangeData> conditionChangeDataMap;
 
         public PlanningNodeFactorySoldiler(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
         {
             this.owner = owner;
             this.commandRunner = commandRunner;
             this.gameMaster = gameMaster;
+
+            // FIXME: 外部から貰うかここで読み込むか まあ外部から貰うでしょう
+            conditionChangeDataMap = new Dictionary<OperationType, ConditionChangeData>();
         }
 
         // FIXME: ConditionパターンのメタデータとOperationのリストから自動生成するように変更
         // SoldierとCaptainの区別もいらなくなるはず
-        public PlanningNode[] Create()
+        public PlanningNode[] Create(OperationType[] operations)
         {
             List<PlanningNode> newNodeList = new List<PlanningNode>();
 
@@ -86,6 +90,20 @@ namespace Conductor.Game.Model
             }
 
             return newNodeList.ToArray();
+        }
+
+        PlanningNode[] CreateNodesOfOperation(OperationType operationType)
+        {
+            var changeData = conditionChangeDataMap[operationType];
+            
+            // 再帰的に書いたほうがシンプルになりそう
+
+            // 引数で連結前のを貰う
+            // 末尾に達したらNodeを作ってnodeListに入れてreturn
+            // 枝分かれする箇所では二回呼ぶ
+            kokokara
+
+            return null;
         }
     }
 }
