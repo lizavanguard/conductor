@@ -10,6 +10,7 @@ namespace Conductor.Game.Model
         // メタデータクラスの作成 ok
         // メタとOperationTypeからNodeを生成する部分 factoryを書き換える感じで
         // テキスト形式(tsvとか)からメタの読み込み
+        // TODO: ChangeTypeが増えたらNode生成ロジックに追記する
         public enum ChangeType
         {
             // 対象のOperationで達成される
@@ -35,9 +36,15 @@ namespace Conductor.Game.Model
             }
         }
 
+        // TODO: こいつらプロパティで充分やん……
         public void SetChangeType(ConditionType conditionType, ChangeType changeType)
         {
             changeMap[conditionType] = changeType;
+        }
+
+        public ChangeType GetChangeType(ConditionType conditionType)
+        {
+            return changeMap[conditionType];
         }
     }
 }
