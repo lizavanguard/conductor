@@ -5,46 +5,25 @@ using UnityEngine;
 
 namespace Conductor.Game.Model
 {
-    public class ConditionChangeData
+    public struct OperationMetaData
     {
         // メタデータクラスの作成 ok
         // メタとOperationTypeからNodeを生成する部分 factoryを書き換える感じで
         // テキスト形式(tsvとか)からメタの読み込み
-        // TODO: ChangeTypeが増えたらNode生成ロジックに追記する
-        public enum ChangeType
-        {
-            // 対象のOperationで達成される
-            Achieve,
+        
 
-            // 対象のOperationが終わると未成立になる可能性がある(例えば、移動を行うので向きが変わる、など)
-            Cancel,
+        // 最低必要条件群 少なくともこれだけはなくてはoperationを開始できない
+        ConditionType[] preconditions;
 
-            // 完全に無関係
-            None
-        }
+        // 最低達成条件群 operationを達成したら最低でもこれだけは満たされる
+        ConditionType[] postconditions;
 
         OperationType operationType;
-        Dictionary<ConditionType, ChangeType> changeMap;
 
-        public ConditionChangeData()
-        {
-            changeMap = new Dictionary<ConditionType, ChangeType>();
+        public ConditionType[] Preconditions { get { return preconditions; } }
 
-            foreach (var type in Enum.GetValues(typeof(ConditionType)) as ConditionType[])
-            {
-                changeMap.Add(type, ChangeType.None);
-            }
-        }
+        public ConditionType[] Postconditions { get { return postconditions; } }
 
-        // TODO: こいつらプロパティで充分やん……
-        public void SetChangeType(ConditionType conditionType, ChangeType changeType)
-        {
-            changeMap[conditionType] = changeType;
-        }
-
-        public ChangeType GetChangeType(ConditionType conditionType)
-        {
-            return changeMap[conditionType];
-        }
+        public OperationType OperationType { get { return operationType; } }
     }
 }

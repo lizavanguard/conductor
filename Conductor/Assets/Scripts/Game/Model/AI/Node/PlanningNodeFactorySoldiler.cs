@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -12,12 +13,21 @@ namespace Conductor.Game.Model
         ActorModelBase owner;
         CommandRunner commandRunner;
         GameMaster gameMaster;
-        
+        Dictionary<OperationType, OperationMetaData> operationMetaDataMap;
+
+        // 再帰を簡単に書くための作業用
+        List<PlanningNode> tempNodeList;
+
         public PlanningNodeFactorySoldiler(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster)
         {
             this.owner = owner;
             this.commandRunner = commandRunner;
             this.gameMaster = gameMaster;
+
+            // FIXME: 外部から貰うかここで読み込むか まあ外部から貰うでしょう
+            operationMetaDataMap = new Dictionary<OperationType, OperationMetaData>();
+
+            tempNodeList = new List<PlanningNode>();
         }
 
         // FIXME: ConditionパターンのメタデータとOperationのリストから自動生成するように変更
@@ -89,6 +99,58 @@ namespace Conductor.Game.Model
             }
 
             return newNodeList.ToArray();
+        }
+
+        PlanningNode[] CreateNodesOfOperation(OperationType operationType)
+        {
+            var operationMeta = operationMetaDataMap[operationType];
+
+            // 再帰的に書いたほうがシンプルになりそう
+
+            // 引数で連結前のを貰う
+            // 末尾に達したらNodeを作ってnodeListに入れてreturn
+            // 枝分かれする箇所では二回呼ぶ
+            tempNodeList.Clear();
+            // kokokara
+
+            return tempNodeList.ToArray();
+        }
+
+        void AppendNewNodeRecursively(int nextConditionIndex, ConditionType[] prevBeforeArray, ConditionType[] prevAfterArray, OperationType operationType)
+        {
+            // 終了条件
+            if (nextConditionIndex == AllConditionTypes.Length)
+            {
+                var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(prevBeforeArray), new Condition(prevAfterArray), operationType);
+                tempNodeList.Add(node);
+                return;
+            }
+
+            var nextCondition = AllConditionTypes[nextConditionIndex];
+            var operationMeta = operationMetaDataMap[operationType];
+
+            if (operationMeta.Preconditions.Contains(nextCondition))
+            {
+                if (operationMeta.Postconditions.Contains(nextCondition))
+                {
+                    // before, after両方に含まれている→前提であり、状態がキープされる→true->trueのみ存在
+                }
+                else
+                {
+                    // beforeのみに含まれている→前提ではあるがその後の状態は保証しない→true->falseのみ存在（更新時に新しく出現する条件 これがあると千日手が発生しうる？）
+                }
+            }
+            else
+            {
+                if (operationMeta.Postconditions.Contains(nextCondition))
+                {
+                    // afterのみに含まれている→前提ですらないが達成はされる→false->trueのみ存在
+                }
+                else
+                {
+                    // どっちにもふくまれていない→無関係→true->trueとfalse->falseが存在(これが前提に入ってしまうこともあるが、つまり「この条件を満たした状態でこのoperationを完遂する」というNodeになる）
+                }
+            }
         }
     }
 }
