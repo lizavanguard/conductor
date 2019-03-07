@@ -24,8 +24,9 @@ namespace Conductor.Game.Model
             this.commandRunner = commandRunner;
             this.gameMaster = gameMaster;
 
-            // FIXME: 外部から貰うかここで読み込むか まあ外部から貰うでしょう
+            // FIXME: 外部から貰うかここで読み込むか まあ外部から貰うでしょう 外部テキストデータ(tsvとか)から読み込む仕組みを作る 
             operationMetaDataMap = new Dictionary<OperationType, OperationMetaData>();
+            kokokara
 
             tempNodeList = new List<PlanningNode>();
         }
@@ -103,15 +104,8 @@ namespace Conductor.Game.Model
 
         PlanningNode[] CreateNodesOfOperation(OperationType operationType)
         {
-            var operationMeta = operationMetaDataMap[operationType];
-
-            // 再帰的に書いたほうがシンプルになりそう
-
-            // 引数で連結前のを貰う
-            // 末尾に達したらNodeを作ってnodeListに入れてreturn
-            // 枝分かれする箇所では二回呼ぶ
             tempNodeList.Clear();
-            // kokokara
+            AppendNewNodeRecursively(0, new ConditionType[0], new ConditionType[0], operationType);
 
             return tempNodeList.ToArray();
         }

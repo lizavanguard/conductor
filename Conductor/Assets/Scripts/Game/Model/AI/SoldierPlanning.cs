@@ -35,7 +35,12 @@ namespace Conductor.Game.Model
 
         public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, IPlanningNodeFactory nodeFactory, IConditionUpdater conditionUpdater)
         {
-            baseNodeList = nodeFactory.Create();
+            var operations = new OperationType[]
+            {
+                OperationType.SearchEnemy,
+                OperationType.AttackNearestEnemy,
+            };
+            baseNodeList = nodeFactory.Create(operations);
 
             currentCondition = new Condition(new ConditionType[] { });
             currentPlanningChain = new List<PlanningNode>();
