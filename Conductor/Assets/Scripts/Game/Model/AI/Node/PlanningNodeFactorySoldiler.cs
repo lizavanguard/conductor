@@ -134,10 +134,18 @@ namespace Conductor.Game.Model
                 if (operationMeta.Postconditions.Contains(nextCondition))
                 {
                     // before, after両方に含まれている→前提であり、状態がキープされる→true->trueのみ存在
+                    var newBeforeList = new List<ConditionType>(prevBeforeArray);
+                    newBeforeList.Add(nextCondition);
+                    var newAfterList = new List<ConditionType>(prevAfterArray);
+                    newAfterList.Add(nextCondition);
+                    AppendNewNodeRecursively(nextConditionIndex + 1, newBeforeList.ToArray(), newAfterList.ToArray(), operationType);
                 }
                 else
                 {
                     // beforeのみに含まれている→前提ではあるがその後の状態は保証しない→true->falseのみ存在（更新時に新しく出現する条件 これがあると千日手が発生しうる？）
+                    var newBeforeList = new List<ConditionType>(prevBeforeArray);
+                    newBeforeList.Add(nextCondition);
+                    AppendNewNodeRecursively(nextConditionIndex + 1, newBeforeList.ToArray(), prevAfterArray, operationType);
                 }
             }
             else
@@ -145,10 +153,19 @@ namespace Conductor.Game.Model
                 if (operationMeta.Postconditions.Contains(nextCondition))
                 {
                     // afterのみに含まれている→前提ですらないが達成はされる→false->trueのみ存在
+                    var newAfterList = new List<ConditionType>(prevAfterArray);
+                    newAfterList.Add(nextCondition);
+                    AppendNewNodeRecursively(nextConditionIndex + 1, prevBeforeArray, newAfterList.ToArray(), operationType);
                 }
                 else
                 {
                     // どっちにもふくまれていない→無関係→true->trueとfalse->falseが存在(これが前提に入ってしまうこともあるが、つまり「この条件を満たした状態でこのoperationを完遂する」というNodeになる）
+                    var newBeforeList = new List<ConditionType>(prevBeforeArray);
+                    newBeforeList.Add(nextCondition);
+                    var newAfterList = new List<ConditionType>(prevAfterArray);
+                    newAfterList.Add(nextCondition);
+                    AppendNewNodeRecursively(nextConditionIndex + 1, newBeforeList.ToArray(), newAfterList.ToArray(), operationType);
+                    AppendNewNodeRecursively(nextConditionIndex + 1, prevBeforeArray, prevAfterArray, operationType);
                 }
             }
         }
