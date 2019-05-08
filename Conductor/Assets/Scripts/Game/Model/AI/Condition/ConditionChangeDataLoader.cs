@@ -11,7 +11,7 @@ namespace Conductor.Game.Model
         static readonly string PreconditionPath = Application.dataPath + "/Resources/Masterdata/Preconditions.tsv";
         static readonly string PostconditionPath = Application.dataPath + "/Resources/Masterdata/Postconditions.tsv";
 
-        Dictionary<OperationType, OperationChangeData> changeDataMap;
+        Dictionary<OperationType, ConditionChangeData> changeDataMap;
 
         public ConditionChangeDataLoader()
         {
@@ -19,7 +19,7 @@ namespace Conductor.Game.Model
 
         public void Load()
         {
-            changeDataMap = new Dictionary<OperationType, OperationChangeData>();
+            changeDataMap = new Dictionary<OperationType, ConditionChangeData>();
 
             LoadPreconditions();
             LoadPostconditions();
@@ -42,7 +42,7 @@ namespace Conductor.Game.Model
                 // いなかったら追加
                 if (!changeDataMap.ContainsKey(operation))
                 {
-                    changeDataMap.Add(operation, new OperationChangeData(operation));
+                    changeDataMap.Add(operation, new ConditionChangeData(operation));
                 }
 
                 var changeData = changeDataMap[operation];
@@ -67,7 +67,7 @@ namespace Conductor.Game.Model
                 // いなかったら追加
                 if (!changeDataMap.ContainsKey(operation))
                 {
-                    changeDataMap.Add(operation, new OperationChangeData(operation));
+                    changeDataMap.Add(operation, new ConditionChangeData(operation));
                 }
 
                 var changeData = changeDataMap[operation];
@@ -75,7 +75,7 @@ namespace Conductor.Game.Model
             }
         }
 
-        public Dictionary<OperationType, OperationChangeData> GetChangeDataMap()
+        public Dictionary<OperationType, ConditionChangeData> GetChangeDataMap()
         {
             return changeDataMap;
         }

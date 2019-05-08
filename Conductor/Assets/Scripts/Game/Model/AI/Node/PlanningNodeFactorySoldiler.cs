@@ -13,7 +13,7 @@ namespace Conductor.Game.Model
         ActorModelBase owner;
         CommandRunner commandRunner;
         GameMaster gameMaster;
-        Dictionary<OperationType, OperationChangeData> operationMetaDataMap;
+        Dictionary<OperationType, ConditionChangeData> conditionChangeDataMap;
 
         // 再帰を簡単に書くための作業用
         List<PlanningNode> tempNodeList;
@@ -24,10 +24,9 @@ namespace Conductor.Game.Model
             this.commandRunner = commandRunner;
             this.gameMaster = gameMaster;
 
-            // FIXME: 外部から貰うかここで読み込むか まあ外部から貰うでしょう 外部テキストデータ(tsvとか)から読み込む仕組みを作る 
-            operationMetaDataMap = new Dictionary<OperationType, OperationChangeData>();
             var loader = new ConditionChangeDataLoader();
             loader.Load();
+            conditionChangeDataMap = loader.GetChangeDataMap();
 
             tempNodeList = new List<PlanningNode>();
         }
@@ -113,7 +112,7 @@ namespace Conductor.Game.Model
             }
 
             var nextCondition = AllConditionTypes[nextConditionIndex];
-            var operationMeta = operationMetaDataMap[operationType];
+            var operationMeta = conditionChangeDataMap[operationType];
 
             if (operationMeta.Preconditions.Contains(nextCondition))
             {

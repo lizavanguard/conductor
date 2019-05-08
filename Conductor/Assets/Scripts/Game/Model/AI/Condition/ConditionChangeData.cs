@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Conductor.Game.Model
 {
-    public struct OperationChangeData
+    public struct ConditionChangeData
     {
         // メタデータクラスの作成 ok
         // メタとOperationTypeからNodeを生成する部分 factoryを書き換える感じで
         // テキスト形式(tsvとか)からメタの読み込み
-        public OperationChangeData(OperationType operationType)
+        public ConditionChangeData(OperationType operationType)
         {
             this.operationType = operationType;
             preconditions = new List<ConditionType>();
