@@ -13,7 +13,7 @@ namespace Conductor.Game.Model
         ActorModelBase owner;
         CommandRunner commandRunner;
         GameMaster gameMaster;
-        Dictionary<OperationType, OperationMetaData> operationMetaDataMap;
+        Dictionary<OperationType, OperationChangeData> operationMetaDataMap;
 
         // 再帰を簡単に書くための作業用
         List<PlanningNode> tempNodeList;
@@ -25,8 +25,9 @@ namespace Conductor.Game.Model
             this.gameMaster = gameMaster;
 
             // FIXME: 外部から貰うかここで読み込むか まあ外部から貰うでしょう 外部テキストデータ(tsvとか)から読み込む仕組みを作る 
-            operationMetaDataMap = new Dictionary<OperationType, OperationMetaData>();
-            kokokara
+            operationMetaDataMap = new Dictionary<OperationType, OperationChangeData>();
+            var loader = new ConditionChangeDataLoader();
+            loader.Load();
 
             tempNodeList = new List<PlanningNode>();
         }
@@ -60,9 +61,6 @@ namespace Conductor.Game.Model
                 {
                     ConditionType.HittingSomeEnemy,
                 };
-                var disabledList = new ConditionType[]
-                {
-                };
                 var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.AttackNearestEnemy);
                 newNodeList.Add(node);
             }
@@ -76,9 +74,6 @@ namespace Conductor.Game.Model
                 {
                     ConditionType.CanTargetSomeEnemy,
                 };
-                var disabledList = new ConditionType[]
-                {
-                };
                 var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.SearchEnemy);
                 newNodeList.Add(node);
             }
@@ -91,9 +86,6 @@ namespace Conductor.Game.Model
                 var afterList = new ConditionType[]
                 {
                     ConditionType.StayNearTargetPoint,
-                };
-                var disabledList = new ConditionType[]
-                {
                 };
                 var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.MoveToTargetPoint);
                 newNodeList.Add(node);

@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace Conductor.Game.Model
 {
-    public class OperationChangeDataLoader
+    public class ConditionChangeDataLoader
     {
-        static string PreconditionPath = "";
-        static string PostconditionPath = "";
+        static readonly string PreconditionPath = Application.dataPath + "/Resources/Masterdata/Preconditions.tsv";
+        static readonly string PostconditionPath = Application.dataPath + "/Resources/Masterdata/Postconditions.tsv";
 
         Dictionary<OperationType, OperationChangeData> changeDataMap;
 
-        public OperationChangeDataLoader()
+        public ConditionChangeDataLoader()
         {
         }
 
