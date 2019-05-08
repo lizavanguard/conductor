@@ -37,56 +37,19 @@ namespace Conductor.Game.Model
         {
             List<PlanningNode> newNodeList = new List<PlanningNode>();
 
-            // 最も近くにいる敵対陣営のキャラのほうを向く
+            foreach (var operation in operations)
             {
-                var beforeList = new ConditionType[]
+                if (!conditionChangeDataMap.ContainsKey(operation))
                 {
-                };
-                var afterList = new ConditionType[]
-                {
-                    ConditionType.LookToSomeEnemy,
-                };
-                var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.LookToNearestEnemy);
-                newNodeList.Add(node);
-            }
+                    Debug.LogError(string.Format("Operation could not be found in condition change data map. Operation name is [{0}]", operation.ToString()));
+                    continue;
+                }
 
-            // 最も近くにいる敵対陣営のキャラを攻撃しようとする
-            {
-                var beforeList = new ConditionType[]
-                {
-                    ConditionType.CanTargetSomeEnemy,
-                };
-                var afterList = new ConditionType[]
-                {
-                    ConditionType.HittingSomeEnemy,
-                };
-                var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.AttackNearestEnemy);
-                newNodeList.Add(node);
-            }
+                var changeData = conditionChangeDataMap[operation];
 
-            // 攻撃相手が見つかるまで索敵
-            {
-                var beforeList = new ConditionType[]
-                {
-                };
-                var afterList = new ConditionType[]
-                {
-                    ConditionType.CanTargetSomeEnemy,
-                };
-                var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.SearchEnemy);
-                newNodeList.Add(node);
-            }
-
-            // TargetPositionの近くに行く
-            {
-                var beforeList = new ConditionType[]
-                {
-                };
-                var afterList = new ConditionType[]
-                {
-                    ConditionType.StayNearTargetPoint,
-                };
-                var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), OperationType.MoveToTargetPoint);
+                var beforeList = changeData.Preconditions;
+                var afterList = changeData.Postconditions;
+                var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), operation);
                 newNodeList.Add(node);
             }
 
