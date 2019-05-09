@@ -31,8 +31,6 @@ namespace Conductor.Game.Model
             tempNodeList = new List<PlanningNode>();
         }
 
-        // FIXME: ConditionパターンのメタデータとOperationのリストから自動生成するように変更
-        // SoldierとCaptainの区別もいらなくなるはず
         public PlanningNode[] Create(OperationType[] operations)
         {
             List<PlanningNode> newNodeList = new List<PlanningNode>();
