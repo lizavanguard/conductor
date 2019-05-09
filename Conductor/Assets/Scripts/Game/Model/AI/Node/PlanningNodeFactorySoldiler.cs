@@ -24,7 +24,7 @@ namespace Conductor.Game.Model
             this.commandRunner = commandRunner;
             this.gameMaster = gameMaster;
 
-            var loader = new ConditionChangeDataLoader();
+            var loader = ConditionChangeDataLoader.CreateSoldierInstance();
             loader.Load();
             conditionChangeDataMap = loader.GetChangeDataMap();
 

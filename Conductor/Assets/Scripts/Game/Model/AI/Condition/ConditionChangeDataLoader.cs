@@ -8,13 +8,30 @@ namespace Conductor.Game.Model
 {
     public class ConditionChangeDataLoader
     {
-        static readonly string PreconditionPath = Application.dataPath + "/Resources/Masterdata/Preconditions.tsv";
-        static readonly string PostconditionPath = Application.dataPath + "/Resources/Masterdata/Postconditions.tsv";
+        static readonly string SoldierPreconditionPath = Application.dataPath + "/Resources/Masterdata/SoldierPreconditions.tsv";
+        static readonly string SoldierPostconditionPath = Application.dataPath + "/Resources/Masterdata/SoldierPostconditions.tsv";
+        static readonly string CaptainPreconditionPath = Application.dataPath + "/Resources/Masterdata/CaptainPreconditions.tsv";
+        static readonly string CaptainPostconditionPath = Application.dataPath + "/Resources/Masterdata/CaptainPostconditions.tsv";
 
         Dictionary<OperationType, ConditionChangeData> changeDataMap;
 
-        public ConditionChangeDataLoader()
+        string preconditionPath;
+        string postconditionPath;
+
+        public static ConditionChangeDataLoader CreateSoldierInstance()
         {
+            return new ConditionChangeDataLoader(SoldierPreconditionPath, SoldierPostconditionPath);
+        }
+
+        public static ConditionChangeDataLoader CreateCaptainInstance()
+        {
+            return new ConditionChangeDataLoader(CaptainPreconditionPath, CaptainPostconditionPath);
+        }
+
+        ConditionChangeDataLoader(string prePath, string postPath)
+        {
+            preconditionPath = prePath;
+            postconditionPath = postPath;
         }
 
         public void Load()
@@ -27,7 +44,7 @@ namespace Conductor.Game.Model
 
         void LoadPreconditions()
         {
-            StreamReader reader = new StreamReader(PreconditionPath, System.Text.Encoding.UTF8);
+            StreamReader reader = new StreamReader(preconditionPath, System.Text.Encoding.UTF8);
 
             // remove header
             reader.ReadLine();
@@ -52,7 +69,7 @@ namespace Conductor.Game.Model
 
         void LoadPostconditions()
         {
-            StreamReader reader = new StreamReader(PostconditionPath, System.Text.Encoding.UTF8);
+            StreamReader reader = new StreamReader(postconditionPath, System.Text.Encoding.UTF8);
 
             // remove header
             reader.ReadLine();
