@@ -8,7 +8,7 @@ namespace Conductor.Game.Model
 {
     public class PlanningNodeFactoryCaptain : IPlanningNodeFactory
     {
-        static readonly ConditionType[] AllConditionTypes = Enum.GetValues(typeof(ConditionType)) as ConditionType[];
+        static readonly int[] AllConditionTypes = (Enum.GetValues(typeof(CaptainConditionType)) as CaptainConditionType[]).Select(c => (int)c).ToArray();
 
         ActorModelBase owner;
         CommandRunner commandRunner;
@@ -45,8 +45,8 @@ namespace Conductor.Game.Model
 
                 var changeData = conditionChangeDataMap[operation];
 
-                var beforeList = changeData.Preconditions;
-                var afterList = changeData.Postconditions;
+                var beforeList = changeData.Preconditions.Select(c => (int)c).ToArray();
+                var afterList = changeData.Postconditions.Select(c => (int)c).ToArray();
                 var node = new PlanningNode(owner, commandRunner, gameMaster, new Condition(beforeList), new Condition(afterList), operation);
                 newNodeList.Add(node);
             }
@@ -57,12 +57,12 @@ namespace Conductor.Game.Model
         PlanningNode[] CreateNodesOfOperation(OperationType operationType)
         {
             tempNodeList.Clear();
-            AppendNewNodeRecursively(0, new ConditionType[0], new ConditionType[0], operationType);
+            AppendNewNodeRecursively(0, new int[] { }, new int[] { }, operationType);
 
             return tempNodeList.ToArray();
         }
 
-        void AppendNewNodeRecursively(int nextConditionIndex, ConditionType[] prevBeforeArray, ConditionType[] prevAfterArray, OperationType operationType)
+        void AppendNewNodeRecursively(int nextConditionIndex, int[] prevBeforeArray, int[] prevAfterArray, OperationType operationType)
         {
             // 終了条件
             if (nextConditionIndex == AllConditionTypes.Length)
@@ -80,16 +80,16 @@ namespace Conductor.Game.Model
                 if (operationMeta.Postconditions.Contains(nextCondition))
                 {
                     // before, after両方に含まれている→前提であり、状態がキープされる→true->trueのみ存在
-                    var newBeforeList = new List<ConditionType>(prevBeforeArray);
+                    var newBeforeList = new List<int>(prevBeforeArray);
                     newBeforeList.Add(nextCondition);
-                    var newAfterList = new List<ConditionType>(prevAfterArray);
+                    var newAfterList = new List<int>(prevAfterArray);
                     newAfterList.Add(nextCondition);
                     AppendNewNodeRecursively(nextConditionIndex + 1, newBeforeList.ToArray(), newAfterList.ToArray(), operationType);
                 }
                 else
                 {
                     // beforeのみに含まれている→前提ではあるがその後の状態は保証しない→true->falseのみ存在（更新時に新しく出現する条件 これがあると千日手が発生しうる？）
-                    var newBeforeList = new List<ConditionType>(prevBeforeArray);
+                    var newBeforeList = new List<int>(prevBeforeArray);
                     newBeforeList.Add(nextCondition);
                     AppendNewNodeRecursively(nextConditionIndex + 1, newBeforeList.ToArray(), prevAfterArray, operationType);
                 }
@@ -99,16 +99,16 @@ namespace Conductor.Game.Model
                 if (operationMeta.Postconditions.Contains(nextCondition))
                 {
                     // afterのみに含まれている→前提ですらないが達成はされる→false->trueのみ存在
-                    var newAfterList = new List<ConditionType>(prevAfterArray);
+                    var newAfterList = new List<int>(prevAfterArray);
                     newAfterList.Add(nextCondition);
                     AppendNewNodeRecursively(nextConditionIndex + 1, prevBeforeArray, newAfterList.ToArray(), operationType);
                 }
                 else
                 {
                     // どっちにもふくまれていない→無関係→true->trueとfalse->falseが存在(これが前提に入ってしまうこともあるが、つまり「この条件を満たした状態でこのoperationを完遂する」というNodeになる）
-                    var newBeforeList = new List<ConditionType>(prevBeforeArray);
+                    var newBeforeList = new List<int>(prevBeforeArray);
                     newBeforeList.Add(nextCondition);
-                    var newAfterList = new List<ConditionType>(prevAfterArray);
+                    var newAfterList = new List<int>(prevAfterArray);
                     newAfterList.Add(nextCondition);
                     AppendNewNodeRecursively(nextConditionIndex + 1, newBeforeList.ToArray(), newAfterList.ToArray(), operationType);
                     AppendNewNodeRecursively(nextConditionIndex + 1, prevBeforeArray, prevAfterArray, operationType);

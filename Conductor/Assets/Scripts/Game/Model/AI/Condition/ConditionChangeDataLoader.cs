@@ -17,21 +17,23 @@ namespace Conductor.Game.Model
 
         string preconditionPath;
         string postconditionPath;
+        Func<string, int> conditionParser;
 
         public static ConditionChangeDataLoader CreateSoldierInstance()
         {
-            return new ConditionChangeDataLoader(SoldierPreconditionPath, SoldierPostconditionPath);
+            return new ConditionChangeDataLoader(SoldierPreconditionPath, SoldierPostconditionPath, t => (int)Enum.Parse(typeof(SoldierConditionType), t));
         }
 
         public static ConditionChangeDataLoader CreateCaptainInstance()
         {
-            return new ConditionChangeDataLoader(CaptainPreconditionPath, CaptainPostconditionPath);
+            return new ConditionChangeDataLoader(CaptainPreconditionPath, CaptainPostconditionPath, t => (int)Enum.Parse(typeof(CaptainConditionType), t));
         }
 
-        ConditionChangeDataLoader(string prePath, string postPath)
+        ConditionChangeDataLoader(string prePath, string postPath, Func<string, int> conditionParser)
         {
             preconditionPath = prePath;
             postconditionPath = postPath;
+            this.conditionParser = conditionParser;
         }
 
         public void Load()
@@ -54,7 +56,7 @@ namespace Conductor.Game.Model
                 var line = reader.ReadLine();
                 var args = line.Split('\t');
                 var operation = (OperationType)Enum.Parse(typeof(OperationType), args[0]);
-                var condition = (ConditionType)Enum.Parse(typeof(ConditionType), args[1]);
+                var condition = conditionParser(args[1]);
 
                 // いなかったら追加
                 if (!changeDataMap.ContainsKey(operation))
@@ -63,7 +65,7 @@ namespace Conductor.Game.Model
                 }
 
                 var changeData = changeDataMap[operation];
-                changeData.AddPrecondition(condition);
+                changeData.AddPrecondition((int)condition);
             }
         }
 
@@ -79,7 +81,7 @@ namespace Conductor.Game.Model
                 var line = reader.ReadLine();
                 var args = line.Split('\t');
                 var operation = (OperationType)Enum.Parse(typeof(OperationType), args[0]);
-                var condition = (ConditionType)Enum.Parse(typeof(ConditionType), args[1]);
+                var condition = conditionParser(args[1]);
 
                 // いなかったら追加
                 if (!changeDataMap.ContainsKey(operation))
@@ -88,7 +90,7 @@ namespace Conductor.Game.Model
                 }
 
                 var changeData = changeDataMap[operation];
-                changeData.AddPostcondition(condition);
+                changeData.AddPostcondition((int)condition);
             }
         }
 

@@ -40,14 +40,14 @@ namespace Conductor.Game.Model
                 soldier.SetTargetPosition(destination);
 
                 SoldierAI soldierAI = gameMaster.ActorUpdater.GetSoldierAI(soldier.Id);
-                soldierAI.Planning.SetGoal(new Condition(new ConditionType[] { ConditionType.StayNearTargetPoint }));
+                soldierAI.Planning.SetGoal(new Condition(new [] { (int)SoldierConditionType.StayNearTargetPoint }));
 
                 direction = rotation * direction;
             }
 
             // 自分自身は今の場所に留まる 場合によっては動きながらも考えるけど、今は留まったままで
             var selfAI = gameMaster.ActorUpdater.GetSoldierAI(Owner.Id);
-            selfAI.Planning.SetGoal(new Condition(new ConditionType[] { ConditionType.StayNearTargetPoint }));
+            selfAI.Planning.SetGoal(new Condition(new [] { (int)SoldierConditionType.StayNearTargetPoint }));
             Owner.SetTargetPosition(Owner.Position);
 
             // 各兵へのリアルタイムな指示はどうすべきだろう

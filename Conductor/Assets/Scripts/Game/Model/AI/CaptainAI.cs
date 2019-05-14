@@ -71,7 +71,7 @@ namespace Conductor.Game.Model
             planning = new SoldierPlanning(owner, commandRunner, gameMaster, nodeFactory, conditionUpdater);
 
             // FIXME: 本当は将軍とかプレイヤーから指示を貰う
-            planning.SetGoal(new Condition(new ConditionType[] { ConditionType.CaptainCompleteCircleFormation }));
+            planning.SetGoal(new Condition(new [] { (int)CaptainConditionType.CaptainCompleteCircleFormation }));
         }
 
         public void Update()

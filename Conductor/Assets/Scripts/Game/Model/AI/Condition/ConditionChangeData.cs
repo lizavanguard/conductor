@@ -13,11 +13,11 @@ namespace Conductor.Game.Model
         public ConditionChangeData(OperationType operationType)
         {
             this.operationType = operationType;
-            preconditions = new List<ConditionType>();
-            postconditions = new List<ConditionType>();
+            preconditions = new List<int>();
+            postconditions = new List<int>();
         }
 
-        public void AddPrecondition(ConditionType condition)
+        public void AddPrecondition(int condition)
         {
             if (preconditions.Contains(condition))
             {
@@ -27,7 +27,7 @@ namespace Conductor.Game.Model
             preconditions.Add(condition);
         }
 
-        public void AddPostcondition(ConditionType condition)
+        public void AddPostcondition(int condition)
         {
             if (postconditions.Contains(condition))
             {
@@ -38,16 +38,16 @@ namespace Conductor.Game.Model
         }
 
         // 最低必要条件群 少なくともこれだけはなくてはoperationを開始できない
-        List<ConditionType> preconditions;
+        List<int> preconditions;
 
         // 最低達成条件群 operationを達成したら最低でもこれだけは満たされる
-        List<ConditionType> postconditions;
+        List<int> postconditions;
 
         OperationType operationType;
 
-        public ConditionType[] Preconditions { get { return preconditions.ToArray(); } }
+        public int[] Preconditions { get { return preconditions.ToArray(); } }
 
-        public ConditionType[] Postconditions { get { return postconditions.ToArray(); } }
+        public int[] Postconditions { get { return postconditions.ToArray(); } }
 
         public OperationType OperationType { get { return operationType; } }
     }

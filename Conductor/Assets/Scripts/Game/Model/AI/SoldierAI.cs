@@ -25,7 +25,7 @@ namespace Conductor.Game.Model
             planning = new SoldierPlanning(owner, commandRunner, gameMaster, nodeFactory, conditionUpdater);
 
             // FIXME: 本当は部隊長クラスからゴールを教えてもらうはず
-            planning.SetGoal(new Condition(new ConditionType[] { ConditionType.HittingSomeEnemy }));
+            planning.SetGoal(new Condition(new [] { (int)SoldierConditionType.HittingSomeEnemy }));
         }
 
         public void Initialize()
