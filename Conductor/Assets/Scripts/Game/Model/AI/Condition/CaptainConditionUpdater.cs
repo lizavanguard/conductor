@@ -33,10 +33,10 @@ namespace Conductor.Game.Model
             {
                 var ai = gameMaster.ActorUpdater.GetSoldierAI(soldier.Id);
                 var condition = ai.Planning.CurrentCondition;
-                nearAll &= condition.Satisfy(ConditionType.StayNearTargetPoint);
+                nearAll &= condition.Satisfy((int)SoldierConditionType.StayNearTargetPoint);
             }
 
-            target.SetFlag(ConditionType.CaptainCompleteCircleFormation, nearAll);
+            target.SetFlag((int)CaptainConditionType.CaptainCompleteCircleFormation, nearAll);
         }
         
         #endregion

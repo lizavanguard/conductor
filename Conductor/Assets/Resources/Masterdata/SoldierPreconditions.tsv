@@ -1,0 +1,2 @@
+OperationType	Precondition
+AttackNearestEnemy	CanTargetSomeEnemy

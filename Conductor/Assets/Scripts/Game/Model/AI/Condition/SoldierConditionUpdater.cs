@@ -52,7 +52,7 @@ namespace Conductor.Game.Model
                 }
             }
 
-            target.SetFlag(ConditionType.LookToSomeEnemy, directionEqual);
+            target.SetFlag((int)SoldierConditionType.LookToSomeEnemy, directionEqual);
         }
 
         // 誰でもいいから敵にタゲ取れる距離にある
@@ -72,7 +72,7 @@ namespace Conductor.Game.Model
                 }
             }
 
-            target.SetFlag(ConditionType.CanTargetSomeEnemy, near);
+            target.SetFlag((int)SoldierConditionType.CanTargetSomeEnemy, near);
         }
 
         // 敵に攻撃している
@@ -80,7 +80,7 @@ namespace Conductor.Game.Model
         {
             // 雑に攻撃状態かどうか見るだけ FIXME: 攻撃が敵に当たっているかどうかも見るべき？
             bool isHitting = owner.CurrentState as ActorModelStateSoldierAttack != null;
-            target.SetFlag(ConditionType.HittingSomeEnemy, isHitting);
+            target.SetFlag((int)SoldierConditionType.HittingSomeEnemy, isHitting);
         }
 
         // TargetPointの近くにいる
@@ -92,7 +92,7 @@ namespace Conductor.Game.Model
             toTarget.y = 0.0f;
 
             bool near = toTarget.sqrMagnitude < Constant.ActorPositionDistanceSqEpsilon;
-            target.SetFlag(ConditionType.StayNearTargetPoint, near);
+            target.SetFlag((int)SoldierConditionType.StayNearTargetPoint, near);
         }
 
         #endregion

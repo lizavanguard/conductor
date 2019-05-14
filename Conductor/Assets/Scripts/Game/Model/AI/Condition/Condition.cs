@@ -4,9 +4,13 @@ using UnityEngine;
 
 namespace Conductor.Game.Model
 {
-    public enum ConditionType
+    public interface ICondition
     {
-        #region Soldier用
+
+    }
+
+    public enum SoldierConditionType
+    {
         // 誰でもいいから敵の方を向いている
         LookToSomeEnemy,
 
@@ -18,12 +22,6 @@ namespace Conductor.Game.Model
 
         // TargetPointの近くにいる
         StayNearTargetPoint,
-        #endregion
-
-        #region Captain用
-        // 円陣が完成している
-        CaptainCompleteCircleFormation,
-        #endregion
     }
 
     public class Condition
@@ -35,12 +33,13 @@ namespace Conductor.Game.Model
         uint conditionFlag;
         public uint ConditionFlag { get { return conditionFlag; } }
 
-        public Condition(ConditionType[] trueList)
+        // 引数はConditionTypeのuintキャスト
+        public Condition(int[] trueList)
         {
             conditionFlag = 0;
-            foreach (var type in trueList)
+            foreach (var typeNum in trueList)
             {
-                conditionFlag |= 1U << (int)type;
+                conditionFlag |= 1U << typeNum;
             }
         }
 
@@ -54,16 +53,17 @@ namespace Conductor.Game.Model
             return other.Satisfy(this);
         }
 
-        // 特定のひとつを満たしているかどうか
-        public bool Satisfy(ConditionType type)
+        // 特定のひとつを満たしているかどうか 引数はConditionTypeのintキャスト
+        public bool Satisfy(int typeNum)
         {
-            var mask = 1U << (int)type;
+            var mask = 1U << typeNum;
             return (conditionFlag & mask) != 0;
         }
 
-        public void SetFlag(ConditionType type, bool flag)
+        // 引数はConditionTypeのintキャスト
+        public void SetFlag(int typeNum, bool flag)
         {
-            var mask = 1U << (int)type;
+            var mask = 1U << typeNum;
 
             if (flag)
             {
@@ -74,6 +74,11 @@ namespace Conductor.Game.Model
                 conditionFlag &= ~mask;
             }
         }
+    }
 
+    public enum CaptainConditionType
+    {
+        // 円陣が完成している
+        CaptainCompleteCircleFormation,
     }
 }

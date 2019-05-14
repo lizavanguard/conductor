@@ -35,9 +35,15 @@ namespace Conductor.Game.Model
 
         public SoldierPlanning(ActorModelBase owner, CommandRunner commandRunner, GameMaster gameMaster, IPlanningNodeFactory nodeFactory, IConditionUpdater conditionUpdater)
         {
-            baseNodeList = nodeFactory.Create();
+            // FIXME: データから読み込むべき soldierかcaptainかによっても異なるはず
+            var operations = new OperationType[]
+            {
+                OperationType.SearchEnemy,
+                OperationType.AttackNearestEnemy,
+            };
+            baseNodeList = nodeFactory.Create(operations);
 
-            currentCondition = new Condition(new ConditionType[] { });
+            currentCondition = new Condition(new int[] { });
             currentPlanningChain = new List<PlanningNode>();
 
             this.owner = owner;

@@ -1,0 +1,5 @@
+OperationType	Postcondition
+LookToNearestEnemy	LookToSomeEnemy
+AttackNearestEnemy	HittingSomeEnemy
+SearchEnemy	CanTargetSomeEnemy
+MoveToTargetPoint	StayNearTargetPoint
