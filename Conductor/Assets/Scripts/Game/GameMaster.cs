@@ -18,6 +18,7 @@ namespace Conductor.Game
         Vector3 targetPosition;
 
         OperationBase operation;
+        FieldModel field;
 
         public ActorUpdater ActorUpdater
         {
@@ -32,6 +33,8 @@ namespace Conductor.Game
             commandRunner = new CommandRunner();
 
             // FIXME: マップ作成
+            var fieldView = Instantiate(actorPrefabReference.Field, transform);
+            field = new FieldModel(fieldView);
 
             // キャラクター作成
             actorUpdater = new ActorUpdater(actorPrefabReference, commandRunner, this);
