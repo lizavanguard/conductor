@@ -10,5 +10,9 @@ namespace Conductor.Game.View
         [SerializeField]
         ActorViewSoldier soldier;
         public ActorViewSoldier Soldier { get { return soldier; } }
+
+        [SerializeField]
+        FieldView field;
+        public FieldView Field { get { return field; } }
     }
 }

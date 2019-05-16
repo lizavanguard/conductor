@@ -39,7 +39,7 @@ namespace Conductor.Game
             {
                 // FIXME: いまはsoldierしか作れないけどcaptainとかも作れるように
                 var enemy = factory.CreateSoldier(ActorModelBase.ArmyGroupSide.Enemy);
-                enemy.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, 4.0f);
+                enemy.ViewBase.transform.localPosition = new Vector3((float)i + 10.0f, 0.0f, 4.0f);
                 enemies[i] = enemy;
 
                 enemySoldierAIs[i] = new SoldierAI(enemy, commandRunner, gameMaster);
@@ -62,7 +62,7 @@ namespace Conductor.Game
                 var friend = factory.CreateSoldier(ActorModelBase.ArmyGroupSide.Friend);
 
                 // AI動作確認のため敵から遠くに
-                friend.ViewBase.transform.localPosition = new Vector3((float)i, 0.0f, -20.0f);
+                friend.ViewBase.transform.localPosition = new Vector3((float)i + 10.0f, 0.0f, 20.0f);
                 friends[i] = friend;
 
                 friendSoldierAIs[i] = new SoldierAI(friend, commandRunner, gameMaster);
@@ -166,6 +166,25 @@ namespace Conductor.Game
             }
 
             return null;
+        }
+
+        public void SetActorHeightOnField(FieldModel field)
+        {
+            foreach (var friend in friends)
+            {
+                var position = friend.ViewBase.transform.position;
+                float height = field.GetHeight(position);
+                position.y = height;
+                friend.ViewBase.transform.position = position;
+            }
+
+            foreach (var enemy in enemies)
+            {
+                var position = enemy.ViewBase.transform.position;
+                float height = field.GetHeight(position);
+                position.y = height;
+                enemy.ViewBase.transform.position = position;
+            }
         }
     }
 }

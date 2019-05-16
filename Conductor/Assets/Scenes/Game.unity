@@ -142,6 +142,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   actorPrefabReference: {fileID: 11400000, guid: 9d2c97ccdc27a7547b9f0148f2ea45a9,
     type: 2}
+  targetPosition: {x: 0, y: 0, z: 0}
 --- !u!4 &141144716
 Transform:
   m_ObjectHideFlags: 0
