@@ -85,7 +85,7 @@ MeshRenderer:
   m_LightProbeUsage: 0
   m_ReflectionProbeUsage: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 99bdadec814d7d44896fca9b6f9cbbd6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -123,3 +123,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8abf3c002de2ff746af8e6266afec915, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  renderer: {fileID: 23605119369542680}
+  meshFilter: {fileID: 33071132064608066}
+  divide: {x: 32, y: 32}
+  size: {x: 50, y: 50}

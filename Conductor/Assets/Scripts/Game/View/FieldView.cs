@@ -16,12 +16,13 @@ namespace Conductor.Game.View
 
         private void Awake()
         {
-
+            mesh = CreateMockMesh();
+            meshFilter.sharedMesh = mesh;
         }
 
         Mesh CreateMockMesh()
         {
-            var mesh = new Mesh();
+            var tempMesh = new Mesh();
 
             int vertexCount = (divide.x + 1) * (divide.y + 1);
 
@@ -33,16 +34,20 @@ namespace Conductor.Game.View
             tileSize.x = tileSize.x / (float)(divide.x);
             tileSize.y = tileSize.y / (float)(divide.y);
 
+            float verticalSCale = 4.0f;
+            float horizontalScale = 10.0f;
             for (int i = 0; i < heightMap.Length; i++)
             {
                 int xIndex = i % (divide.x + 1);
                 int zIndex = i / (divide.x + 1);
 
                 Vector3 position = new Vector3(tileSize.x * (float)xIndex, 0.0f, tileSize.y * (float)zIndex);
-                position.y = Mathf.PerlinNoise(position.x, position.z);
+                position.y = Mathf.PerlinNoise(position.x / horizontalScale, position.z / horizontalScale) * verticalSCale;
                 heightMap[i] = position.y;
                 vertices[i] = position;
             }
+
+            tempMesh.SetVertices(new List<Vector3>(vertices));
 
             // index N型で
             int tileCount = divide.x * divide.y;
@@ -64,18 +69,52 @@ namespace Conductor.Game.View
                 indices[i * 6 + 5] = vertexOffset + divide.x + 2;
             }
 
-            mesh.SetTriangles(indices, 0);
+            tempMesh.SetTriangles(indices, 0);
 
-            // normal どうせモックだし正確な法線じゃなくてもよくね
+            // normal
             var addedCounts = new int[vertexCount];
             var normals = new Vector3[vertexCount];
-            全三角形でループ、三角形法線を算出して足していって最後に割る
+            for (int i = 0; i < tileCount * 2; i++)
+            {
+                int i0 = indices[i * 3];
+                int i2 = indices[i * 3 + 1];
+                int i1 = indices[i * 3 + 2];
+
+                var p0 = vertices[i0];
+                var p1 = vertices[i1];
+                var p2 = vertices[i2];
+
+                var v1 = p1 - p0;
+                var v2 = p2 - p0;
+
+                var normal = Vector3.Cross(v1, v2).normalized;
+
+                // 必要ないはずだけど一応ね
+                if (normal.y < 0.0f)
+                {
+                    normal = -normal;
+                }
+
+                addedCounts[i0]++;
+                addedCounts[i1]++;
+                addedCounts[i2]++;
+                normals[i0] += normal;
+                normals[i1] += normal;
+                normals[i2] += normal;
+            }
+
+            for (int i = 0; i < vertexCount; i++)
+            {
+                normals[i] /= (float)addedCounts[i];
+            }
+
+            tempMesh.SetNormals(new List<Vector3>(normals));
 
             // texcoord
 
-            mesh.vertices = vertices;
+            tempMesh.vertices = vertices;
 
-            return mesh;
+            return tempMesh;
         }
     }
 }
