@@ -22,9 +22,9 @@ namespace Conductor.Game.Model
         }
 
         // 高さ取得
-        public float GetHeight(Vector2 horizontalPosition)
+        public float GetHeight(Vector3 position)
         {
-            return 0.0f;
+            return view.GetHeight(position);
         }
     }
 }

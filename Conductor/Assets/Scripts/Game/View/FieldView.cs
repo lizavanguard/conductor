@@ -12,12 +12,61 @@ namespace Conductor.Game.View
         [SerializeField] Vector2 size;
 
         Mesh mesh;
-        float[] heightMap;
+        Vector3[] vertices;
+
 
         private void Awake()
         {
             mesh = CreateMockMesh();
             meshFilter.sharedMesh = mesh;
+        }
+
+        public float GetHeight(Vector3 position)
+        {
+            // out of area
+            if (position.x < 0.0f || size.x < position.x
+                || position.z < 0.0f || size.y < position.z)
+            {
+                return 0.0f;
+            }
+
+            // タイルを特定
+            Vector2 tileSize = new Vector2(size.x / (float)divide.x, size.y / (float)divide.y);
+            int xIndex = (int)(position.x / tileSize.x);
+            int zIndex = (int)(position.z / tileSize.y);
+            int tileIndex = zIndex * divide.x + xIndex;
+
+            // Nの左下と右上を特定
+            Vector3 p0, p1, p2;
+            int baseIndex = zIndex * (divide.x + 1) + xIndex;
+            Vector3 toRightDown = vertices[baseIndex + 1] - position;
+
+            if (toRightDown.z / toRightDown.x > -tileSize.y / tileSize.x)
+            {
+                // 左下
+                p0 = vertices[baseIndex];
+                p1 = vertices[baseIndex + divide.x + 1];
+                p2 = vertices[baseIndex + 1];
+            }
+            else
+            {
+                // 右上
+                p0 = vertices[baseIndex + divide.x + 1];
+                p1 = vertices[baseIndex + 1];
+                p2 = vertices[baseIndex + divide.x + 2];
+            }
+
+            var v0 = position - p0;
+            var v1 = position - p1;
+            var v2 = position - p2;
+            v0.y = v1.y = v2.y = 0.0f;
+            float s0 = Mathf.Abs(Vector3.Cross(v1, v2).y);
+            float s1 = Mathf.Abs(Vector3.Cross(v2, v0).y);
+            float s2 = Mathf.Abs(Vector3.Cross(v0, v1).y);
+            float s = s0 + s1 + s2;
+            float height = (s0 / s) * p0.y + (s1 / s) * p1.y + (s2 / s) * p2.y;
+
+            return height;
         }
 
         Mesh CreateMockMesh()
@@ -27,8 +76,7 @@ namespace Conductor.Game.View
             int vertexCount = (divide.x + 1) * (divide.y + 1);
 
             // vertex
-            var heightMap = new float[vertexCount];
-            var vertices = new Vector3[vertexCount];
+            vertices = new Vector3[vertexCount];
 
             Vector2 tileSize = size;
             tileSize.x = tileSize.x / (float)(divide.x);
@@ -36,14 +84,13 @@ namespace Conductor.Game.View
 
             float verticalSCale = 4.0f;
             float horizontalScale = 10.0f;
-            for (int i = 0; i < heightMap.Length; i++)
+            for (int i = 0; i < vertices.Length; i++)
             {
                 int xIndex = i % (divide.x + 1);
                 int zIndex = i / (divide.x + 1);
 
                 Vector3 position = new Vector3(tileSize.x * (float)xIndex, 0.0f, tileSize.y * (float)zIndex);
                 position.y = Mathf.PerlinNoise(position.x / horizontalScale, position.z / horizontalScale) * verticalSCale;
-                heightMap[i] = position.y;
                 vertices[i] = position;
             }
 

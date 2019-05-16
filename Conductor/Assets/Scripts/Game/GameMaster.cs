@@ -49,6 +49,8 @@ namespace Conductor.Game
 
             // FIXME: after updating each component
             commandRunner.Update();
+
+            actorUpdater.SetActorHeightOnField(field);
         }
     }
 }
