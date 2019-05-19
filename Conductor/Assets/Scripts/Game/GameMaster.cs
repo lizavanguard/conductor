@@ -17,9 +17,12 @@ namespace Conductor.Game
         [SerializeField]
         Vector3 targetPosition;
 
+        [SerializeField] Camera mainCamera;
+
         OperationBase operation;
         FieldModel field;
         CursorModel cursor;
+        CameraController cameraController;
 
         public ActorUpdater ActorUpdater
         {
@@ -40,9 +43,14 @@ namespace Conductor.Game
             // キャラクター作成
             actorUpdater = new ActorUpdater(actorPrefabReference, commandRunner, this);
 
+            // FIXME: CameraControllerを作ったほうがよさげ
+
             // カーソル
             var cursorView = Instantiate(actorPrefabReference.Cursor, transform);
             cursor = new CursorModel(cursorView, actorUpdater.Friends[0], field, actorUpdater);
+
+            // カメラ
+            cameraController = new CameraController(mainCamera, actorUpdater.Friends[0]);
         }
 
         /// <summary>
@@ -56,6 +64,10 @@ namespace Conductor.Game
             commandRunner.Update();
 
             actorUpdater.SetActorHeightOnField(field);
+
+            cameraController.Update();
+
+            cursor.Update();
         }
     }
 }
