@@ -47,7 +47,7 @@ namespace Conductor.Game
 
             // カーソル
             var cursorView = Instantiate(actorPrefabReference.Cursor, transform);
-            cursor = new CursorModel(cursorView, actorUpdater.Friends[0], field, actorUpdater);
+            cursor = new CursorModel(cursorView, actorUpdater.Friends[0], field, actorUpdater, mainCamera);
 
             // カメラ
             cameraController = new CameraController(mainCamera, actorUpdater.Friends[0]);
