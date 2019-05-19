@@ -19,6 +19,7 @@ namespace Conductor.Game
 
         OperationBase operation;
         FieldModel field;
+        CursorModel cursor;
 
         public ActorUpdater ActorUpdater
         {
@@ -38,6 +39,10 @@ namespace Conductor.Game
 
             // キャラクター作成
             actorUpdater = new ActorUpdater(actorPrefabReference, commandRunner, this);
+
+            // カーソル
+            var cursorView = Instantiate(actorPrefabReference.Cursor, transform);
+            cursor = new CursorModel(cursorView, actorUpdater.Friends[0], field, actorUpdater);
         }
 
         /// <summary>

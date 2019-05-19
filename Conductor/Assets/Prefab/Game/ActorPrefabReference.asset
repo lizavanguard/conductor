@@ -13,3 +13,4 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   soldier: {fileID: 114573862752436906, guid: 54247155881564243bf2246665d82dd0, type: 2}
   field: {fileID: 114861851741820062, guid: c4971e05b0a41794cb8ec58847ec5bc5, type: 2}
+  cursor: {fileID: 114266341953427376, guid: 75a3ad921725c264c96565ce2580281c, type: 2}

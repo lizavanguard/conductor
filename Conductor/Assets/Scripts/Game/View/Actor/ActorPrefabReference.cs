@@ -14,5 +14,9 @@ namespace Conductor.Game.View
         [SerializeField]
         FieldView field;
         public FieldView Field { get { return field; } }
+
+        [SerializeField]
+        CursorView cursor;
+        public CursorView Cursor { get { return cursor; } }
     }
 }
