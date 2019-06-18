@@ -7,6 +7,8 @@ namespace Conductor.Game.Model
 {
     public class CursorModel
     {
+        const float TargetingRange = 1.0f;
+
         CursorView view;
         ActorModelBase mainActor;
         FieldModel field;
@@ -29,10 +31,15 @@ namespace Conductor.Game.Model
             position = UpdatePosition();
 
             // 近くにいるactorをさがす
+            var target = SearchNearestCaptain(position);
 
             // 近くにいたらそいつを指すようにViewに位置を与える
-            view.transform.position = position;
+            if (target != null)
+            {
+                position = target.Position + Vector3.up * 2.0f;
+            }
 
+            view.transform.position = position;
         }
 
         Vector3 UpdatePosition()
@@ -55,6 +62,46 @@ namespace Conductor.Game.Model
             cuesorPosition.y = fieldHeight;
 
             return cuesorPosition;
+        }
+
+        ActorModelBase SearchNearestCaptain(Vector3 position)
+        {
+            // FIXME: この収集作業はUpdaterが行ってキャッシュするほうがいいと思います
+            var captains = new List<ActorModelBase>();
+            foreach (var friend in actorUpdater.Friends)
+            {
+                if (actorUpdater.GetCaptainAI(friend.Id) != null)
+                {
+                    captains.Add(friend);
+                }
+            }
+
+            foreach (var enemy in actorUpdater.Enemies)
+            {
+                if (actorUpdater.GetCaptainAI(enemy.Id) != null)
+                {
+                    captains.Add(enemy);
+                }
+            }
+
+            ActorModelBase target = null;
+            float min = float.MaxValue;
+            foreach (var captain in captains)
+            {
+                float sqDistance = (captain.Position - position).sqrMagnitude;
+                if (sqDistance > TargetingRange * TargetingRange)
+                {
+                    continue;
+                }
+
+                if (sqDistance < min)
+                {
+                    min = sqDistance;
+                    target = captain;
+                }
+            }
+
+            return target;
         }
     }
 }
